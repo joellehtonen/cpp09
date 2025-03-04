@@ -11,13 +11,5 @@ int main(int ac, char** av)
 
 
 
-	std::ifstream database("database.csv");
-	if (database.is_open() == false)
-		throw std::runtime_error("The database could not be opened");
-	std::string line;
-	while (getline(database, line))
-	{
 
-	}
-	database.close();
 }

@@ -20,5 +20,6 @@ class BitcoinExchange {
 		BitcoinExchange(const BitcoinExchange& copy);
 		const BitcoinExchange& operator=(const BitcoinExchange& copy);
 
-		const float& getData()const;
+		void databaseIntoContainer();
+		void inputIntoContainer(const std::string& input);
 };
