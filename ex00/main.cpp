@@ -7,9 +7,10 @@ int main(int ac, char** av)
 		std::cerr << "Error. Input parameters are incorrect" << std::endl;
 		return -1;
 	}
-	BitcoinExchange rate(av[1]);
+	BitcoinExchange *rate = new BitcoinExchange();
+	rate->convert(av[1]);
 
 
 
-
+	delete rate;
 }

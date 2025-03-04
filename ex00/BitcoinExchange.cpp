@@ -1,27 +1,22 @@
 #include "BitcoinExchange.hpp"
 
-BitcoinExchange::BitcoinExchange() { };
-BitcoinExchange::BitcoinExchange(const std::string& input)
+BitcoinExchange::BitcoinExchange()
 {
-	databaseIntoContainer();
-	inputIntoContainer(input);
-
-
+	copyDatabase();
 };
-
 BitcoinExchange::~BitcoinExchange() {};
-
-
-BitcoinExchange::BitcoinExchange(const BitcoinExchange& copy) { };
+BitcoinExchange::BitcoinExchange(const BitcoinExchange& copy) 
+: _data(copy._data), _input(copy._input) { };
 const BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange& copy) {
 	if (this != &copy)
 	{
-		
+		this->_data = copy._data;
+		this->_input = copy._input;
 	}
 	return *this;
 };
 
-void BitcoinExchange::databaseIntoContainer() {
+void BitcoinExchange::copyDatabase() {
 	std::ifstream dataStream("data.csv");
 	if (dataStream.is_open() == false)
 		throw std::runtime_error("The database could not be opened");
@@ -29,11 +24,30 @@ void BitcoinExchange::databaseIntoContainer() {
 	while (getline(dataStream, line))
 	{
 		int delim = line.find(',');
+		if (delim == std::string::npos)
+			throw std::runtime_error("Database incorrectly formatted");
+		std::string key = line.substr(0, delim);
+		std::string stringValue = line.substr(delim + 1);
+		try {
+			float floatValue = stof(stringValue);
+			this->_data[key] = floatValue;
+		}
+		catch (...) {
+			throw std::runtime_error("Database incorrectly formatted");
+		};
+
 	}
 	dataStream.close();
 };
 
-void BitcoinExchange::inputIntoContainer(const std::string& input)
+void BitcoinExchange::convert(const std::string& input) {
+	copyInput(input);
+};
+
+
+
+// remember to test with whitespace
+void BitcoinExchange::copyInput(const std::string& input)
 {
 	std::ifstream inputStream(input);
 	if (inputStream.is_open() == false)
@@ -44,22 +58,18 @@ void BitcoinExchange::inputIntoContainer(const std::string& input)
 		int delim = line.find('|');
 		if (delim == std::string::npos)
 		{
-			this->_input[line + "_INPUT_ERROR"]; // handle more comprehensively later?
+			this->_input[line + "_INPUT_ERROR"]; // handle more comprehensively later
 			continue ;
 		}
 		std::string key = line.substr(0, delim);
 		std::string stringValue = line.substr(delim + 1);
-		for (int i = 0; i < stringValue.length(); i++)
-		{
-			char c = stringValue[i];
-			if (isdigit(c) == false)
-			{
-				this->_input[line + "_FLOAT_ERROR"];
-				continue ;
-			}
+		try {	
+			float floatValue = stof(stringValue);
+			this->_input[key] = floatValue;
 		}
-		float floatValue = std::stof(stringValue);
-		this->_input[key] = floatValue;
+		catch (...) {
+			this->_input[line + "_FLOAT_ERROR"];
+		}
 	}
 	inputStream.close();
 };

@@ -11,15 +11,13 @@ class BitcoinExchange {
 	private:
 		std::map<std::string, float> _data;
 		std::map<std::string, float> _input;
-
-		BitcoinExchange();
-
 	public:
-		BitcoinExchange(const std::string& input);
+		BitcoinExchange();
 		~BitcoinExchange();
 		BitcoinExchange(const BitcoinExchange& copy);
 		const BitcoinExchange& operator=(const BitcoinExchange& copy);
 
-		void databaseIntoContainer();
-		void inputIntoContainer(const std::string& input);
+		void copyDatabase();
+		void convert(const std::string& input);
+		void copyInput(const std::string& input);
 };
