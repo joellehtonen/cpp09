@@ -3,6 +3,9 @@ ex00
 non-existing leap days are invalid and should output as such
 errors should not necessarily exit the program, just record the error in the appro line
 
+use reverse iterator
+maybe change key strings to ints for better comparison
+
 
 
 - look for first database (based on its name) upon construction. it doesnt exist, cancel
