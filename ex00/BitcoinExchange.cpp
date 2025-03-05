@@ -5,32 +5,33 @@ BitcoinExchange::BitcoinExchange() {
 };
 BitcoinExchange::~BitcoinExchange() { };
 BitcoinExchange::BitcoinExchange(const BitcoinExchange& copy) 
-: _data(copy._data), _input(copy._input) { };
+: _data(copy._data) { };
 const BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange& copy) {
 	if (this != &copy)
 	{
 		this->_data = copy._data;
-		this->_input = copy._input;
 	}
 	return *this;
 };
 
 void BitcoinExchange::exchange(const std::string& input) {
 	copyDatabase();
-	copyInput(input);
+	readInput(input);
+	//copyInput(input);
 	// auto it = _data.begin();
 	// std::cout << "database #0 = " << it->first << " | " << it->second << std::endl;
 	// it++;
 	// std::cout << "database #1 = " << it->first << " | " << it->second << std::endl;
+	// it++;
+	// std::cout << "database #2 = " << it->first << " | " << it->second << std::endl;
 	// it = _input.begin();
 	// std::cout << "input #0 = " << it->first << " | " << it->second << std::endl;
 	// it++;
 	// std::cout << "input #1 = " << it->first << " | " << it->second << std::endl;
-	lineByLine();
 };
 
 void BitcoinExchange::copyDatabase() {
-	std::ifstream dataStream("data.csv");
+	std::ifstream dataStream("minidata.csv");
 	if (dataStream.is_open() == false)
 		throw std::runtime_error("The database could not be opened");
 	std::string line;
@@ -57,7 +58,9 @@ void BitcoinExchange::copyDatabase() {
 	dataStream.close(); //will this leak in case error is thrown?
 };
 
-void BitcoinExchange::copyInput(const std::string& input)
+
+//TODO REFACTOR THIS
+void BitcoinExchange::readInput(const std::string& input)
 {
 	std::ifstream inputStream(input);
 	if (inputStream.is_open() == false)
@@ -68,7 +71,7 @@ void BitcoinExchange::copyInput(const std::string& input)
 		size_t delim = line.find('|');
 		if (delim == std::string::npos)
 		{
-			// this->_input[line + "_INPUT_ERROR"]; // handle more comprehensively later
+			processInput(0, 0); //make specific error codes later
 			continue ;
 		}
 		std::string keyString = line.substr(0, delim);
@@ -76,10 +79,10 @@ void BitcoinExchange::copyInput(const std::string& input)
 		std::string valueString = line.substr(delim + 1);
 		try {	
 			float valueFloat = stof(valueString);
-			this->_input[keyInt] = valueFloat;
+			processInput(keyInt, valueFloat);
 		}
 		catch (...) {
-			//this->_input[line + "_FLOAT_ERROR"];
+			processInput(0, 0); //make specific error codes later
 			continue ;
 		}
 	}
@@ -97,41 +100,38 @@ int BitcoinExchange::convertStringtoInt(std::string& keyString)
 	return stoi(keyString);
 }
 
-void BitcoinExchange::lineByLine()
+void BitcoinExchange::processInput(int key, float value)
 {
-	std::map<int, float>::const_iterator inputIt = _input.begin();
-	while (inputIt != _input.end())
-	{
+	// std::map<int, float>::const_iterator inputIt = _input.begin();
+	std::map<int, float>::const_reverse_iterator dataIt = _data.crbegin();
+	// while (inputIt != _input.end())
+	// {
 		//TODO check for invalid date (use gettime), if so print error and continue to next line
-		std::map<int, float>::const_reverse_iterator dataIt = _data.crbegin();
-		while (inputIt->first > dataIt->first)
+		while (dataIt != _data.crend() && key > dataIt->first)
 			dataIt++;
 		//TODO check for invalid format, if so print error
-		printDate(inputIt);
-		printEquation(inputIt, dataIt);
-		inputIt++;
+		printDate(key);
+		printEquation(value, dataIt);
+		// inputIt++;
+		dataIt = _data.crbegin();
+	// }
+}
+
+void BitcoinExchange::printDate(int key)
+{
+	std::string keyString = std::to_string(key);
+	for (size_t i = 0; i < keyString.length(); i++)
+	{
+		std::cout << keyString[i];
+		if (i == 3 || i == 5)
+			std::cout << '-';
 	}
 }
 
-void BitcoinExchange::printDate(std::map<int, float>::const_iterator it)
+void BitcoinExchange::printEquation(float value, std::map<int,float>::const_reverse_iterator dataIt)
 {
-	std::string keyString = std::to_string(it->first);
-	for (int i = 0; i < 4; i++)
-		std::cout << keyString[i];
-	std::cout << '-';
-	for (int i = 4; i < 6; i++)
-		std::cout << keyString[i];
-	std::cout << '-';
-	for (int i = 6; i < 8; i++)
-		std::cout << keyString[i];
-}
-
-void BitcoinExchange::printEquation(std::map<int,float>::const_iterator inputIt, std::map<int,float>::const_reverse_iterator dataIt)
-{
-	float result = inputIt->second * dataIt->second;
-	std::cout << "\n\n TEST \n\n";
-	std::cout << "input second = " << inputIt->second << " data second = " << dataIt->second;
-	std::cout << "\n\n";
-	std::cout << " => " << inputIt->second << " = " << result << "\n";
+	float result = value * dataIt->second;
+	std::cout << " => " << value << " = " << result << "\n";
+	//std::cout << " => " << dataIt->second << " = " << result << "\n";
 	//check width of the float, so all decimals get printed
 }
