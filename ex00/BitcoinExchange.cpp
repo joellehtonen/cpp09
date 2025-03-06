@@ -38,7 +38,7 @@ void BitcoinExchange::copyDatabase() {
 		std::string keyString = line.substr(0, delim);
 		if (keyString.empty() == true)
 			break ;
-		int keyInt = convertStringtoInt(keyString);
+		int keyInt = convertStringToInt(keyString);
 		std::string valueString = line.substr(delim + 1);
 		float valueFloat = stof(valueString);
 		this->_data[keyInt] = valueFloat;
@@ -67,37 +67,80 @@ void BitcoinExchange::readInput(const std::string& input)
 		size_t delim = line.find('|');
 		if (delim == std::string::npos)
 		{
-			printError(); //make specific error codes later
+			printError(ERROR_DELIM_MISSING);
 			continue ;
 		}
 		std::string keyString = line.substr(0, delim);
-		if (keyString.empty() == true)
+		if (keyString.length() != 11)
 		{
-			printError();
+			printError(ERROR_DATE_FORMAT);
 			continue ;
 		}
-		checkValidDate(keyString);
-		// tm dateCheck;
-		// inputStream >> std::get_time(&dateCheck, "%Y-%m-%d");
-		int keyInt = convertStringtoInt(keyString);
+		if (checkIfDateValid(keyString) == false)
+		{
+			printError(ERROR_DATE_INVALID);
+			continue ;
+		}
+		int keyInt = convertStringToInt(keyString);
 		std::string valueString = line.substr(delim + 1);
 		try {	
 			float valueFloat = stof(valueString);
-			processInput(keyInt, valueFloat);
+			processInput(keyInt, valueFloat, keyString);
 		}
 		catch (...) {
-			printError(); //make specific error codes later
+			printError(ERROR_BAD_INPUT);
 			continue ;
 		}
 	}
 	inputStream.close();
 };
 
-void BitcoinExchange::checkValidDate(std::string keyString) {
-	
+bool BitcoinExchange::checkIfDateValid(const std::string& keyString) 
+{
+	std::istringstream copyStream(keyString);
+	tm date = {};
+	copyStream >> std::get_time(&date, "%Y-%m-%d");
+	if (checkDateFormat(date) == false)
+		return false;
+	if (checkIfFutureDate(date) == true)
+		return false;
+	if (date.tm_year < 2008 - 1900)
+		return false;
+	return true;
 };
 
-int BitcoinExchange::convertStringtoInt(std::string& keyString)
+bool BitcoinExchange::checkDateFormat(tm date1)
+{
+	tm date2 = date1;
+	time_t time = mktime(&date1);
+	if (time == -1)
+		return false;
+	if (date1.tm_year != date2.tm_year
+		|| date1.tm_mon != date2.tm_mon
+		|| date1.tm_mday != date2.tm_mday)
+	{
+		return false;
+	}
+	return true;
+}
+
+bool BitcoinExchange::checkIfFutureDate(tm ref)
+{
+	std::time_t now = std::time(nullptr);
+	tm today = *std::localtime(&now);
+	if (ref.tm_year > today.tm_year)
+		return true;
+	if (ref.tm_year == today.tm_year
+		&& ref.tm_mon > today.tm_mon)
+		return true;
+	if (ref.tm_year == today.tm_year
+		&& ref.tm_mon == today.tm_mon
+		&& ref.tm_mday > today.tm_mday)
+		return true;
+	return false;
+}
+
+int BitcoinExchange::convertStringToInt(std::string& keyString)
 {
 	for (size_t i = keyString.find_first_not_of("0123456789"); 
 		i != std::string::npos; 
@@ -108,28 +151,26 @@ int BitcoinExchange::convertStringtoInt(std::string& keyString)
 	return stoi(keyString);
 }
 
-void BitcoinExchange::processInput(int key, float value)
+void BitcoinExchange::processInput(const int& key, const float& value, const std::string& keyString)
 {
 	std::map<int, float>::const_reverse_iterator dataIt = _data.crbegin();
-	//TODO check for invalid date (use gettime), if so print error and continue to next line
 	while (dataIt != _data.crend() && key < dataIt->first)
 		dataIt++;
-	if (dataIt == _data.crend())
-		dataIt = _data.crbegin();
+	//if (dataIt == _data.crend())
+	//	dataIt = _data.crbegin();
 	if (value < 0 )
-		printError(); //make specific error codes later
+		printError(ERROR_NOT_POSITIVE);
 	else if (value >= INT_MAX)
-		printError(); //make specific error codes later
+		printError(ERROR_INT_MAX);
 	else
 	{
-		printDate(key);
+		printDate(keyString);
 		printEquation(value, dataIt);
 	}
 }
 
-void BitcoinExchange::printDate(int key)
+void BitcoinExchange::printDate(const std::string& keyString)
 {
-	std::string keyString = std::to_string(key);
 	for (size_t i = 0; i < keyString.length(); i++)
 	{
 		std::cout << keyString[i];
@@ -138,13 +179,13 @@ void BitcoinExchange::printDate(int key)
 	}
 }
 
-void BitcoinExchange::printEquation(float value, std::map<int,float>::const_reverse_iterator dataIt)
+void BitcoinExchange::printEquation(const float& value, std::map<int,float>::const_reverse_iterator& dataIt)
 {
 	float result = value * dataIt->second;
 	std::cout << " => " << value << " = " << result << "\n";
 	//check width of the float, so all decimals get printed
 }
 
-void BitcoinExchange::printError() {
-	std::cout << "Error: bad input\n";
+void BitcoinExchange::printError(std::string errorMessage) {
+	std::cout << "Error: " << errorMessage << std::endl;
 };

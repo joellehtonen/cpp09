@@ -3,12 +3,19 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <exception>
 #include <cctype>
 #include <climits>
-// #include <ctime>
+#include <ctime>
 #include <iomanip>
 #include <algorithm>
+#define ERROR_NOT_POSITIVE "not a positive number"
+#define ERROR_INT_MAX "too large a number"
+#define ERROR_DATE_INVALID "date invalid"
+#define ERROR_DATE_FORMAT "date format incorrect: YYYY-MM-DD"
+#define ERROR_BAD_INPUT "bad input"
+#define ERROR_DELIM_MISSING "delimiter missing"
 
 class BitcoinExchange {
 	private:
@@ -16,12 +23,14 @@ class BitcoinExchange {
 
 		void	copyDatabase();
 		void	readInput(const std::string& input);
-		void	checkValidDate(std::string keyString);
-		int		convertStringtoInt(std::string& string);
-		void	processInput(int key, float value);
-		void	printError();
-		void	printDate(int key);
-		void	printEquation(float value, std::map<int,float>::const_reverse_iterator dataIt);
+		bool	checkIfDateValid(const std::string& keyString);
+		bool 	checkDateFormat(tm date1);
+		bool	checkIfFutureDate(tm ref);
+		int		convertStringToInt(std::string& string);
+		void	processInput(const int& key, const float& value, const std::string& keyString);
+		void	printError(std::string errorMessage);
+		void	printDate(const std::string& keyString);
+		void	printEquation(const float& value, std::map<int,float>::const_reverse_iterator& dataIt);
 	
 	public:
 		BitcoinExchange();
