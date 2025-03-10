@@ -1,0 +1,15 @@
+- start timer
+- put numbers into container
+- give numbers ranks
+
+use vector and list? or vector and deque for random access
+
+use class as a struct
+
+allow both 1 2 3 and "1 2 3" as inputs
+
+struct: 
+int value
+int rank
+boolean bigger;
+boolean done;

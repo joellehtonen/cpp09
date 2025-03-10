@@ -1,9 +1,9 @@
-NAME	=	RPN
+NAME	=	PmergeMe
 CC		=	c++
 FLAGS	=	-Wall -Wextra -Werror -std=c++20
 SRCS	=	main.cpp \
-			RPN.cpp
-HEADER  =	RPN.hpp
+			BitcoinExchange.cpp
+HEADER  =	BitcoinExchange.hpp
 OBJS	=	$(SRCS:.cpp=.o)
 
 all: $(NAME)

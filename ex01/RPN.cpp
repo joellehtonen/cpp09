@@ -28,7 +28,6 @@ void RPN::calculate(std::string originalArgument)
         }
         else if (calculator.size() >= 2)
         {
-            operationDone = true;
             int first = calculator.top();
             calculator.pop();
             //std::cout << "first: " << first << std::endl; 
@@ -39,6 +38,7 @@ void RPN::calculate(std::string originalArgument)
             int result = arithmetic(second, first, part);
             //std::cout << "result: " << result << std::endl;
             calculator.push(result);
+            operationDone = true;
         }
         else
             throw std::runtime_error("Calculator needs at least 2 numbers before an operator to function");
