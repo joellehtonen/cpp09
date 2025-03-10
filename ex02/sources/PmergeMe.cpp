@@ -1,22 +1,22 @@
-#include "PmergeMe.hpp"
+#include "../includes/PmergeMe.hpp"
 
 PmergeMe::PmergeMe() { 
     value = 0;
-    rank = 0;
-    sorted = false;
+    rank = 1;
+    checked = false;
     bigger = false;
 };
 PmergeMe::PmergeMe(std::string paramValue) { 
     value = stoi(paramValue);
-    rank = 0;
-    sorted = false;
+    rank = 1;
+    checked = false;
     bigger = false;
 };
 PmergeMe::~PmergeMe() { };
 PmergeMe::PmergeMe(const PmergeMe& copy) { 
     value = copy.value;
     rank = copy.rank;
-    sorted = copy.sorted;
+    checked = copy.checked;
     bigger = copy.bigger;
 };
 PmergeMe& PmergeMe::operator=(const PmergeMe& copy) {
@@ -24,20 +24,17 @@ PmergeMe& PmergeMe::operator=(const PmergeMe& copy) {
     {
         value = copy.value;
         rank = copy.rank;
-        sorted = copy.sorted;
+        checked = copy.checked;
         bigger = copy.bigger;
     }
     return *this;
 };
-
 int PmergeMe::getValue() const {
     return value;
 };
-
-int PmergeMe::setValue(int paramValue) {
+void PmergeMe::setValue(int paramValue) {
     value = paramValue;
 };
-
 int PmergeMe::getRank() const {
     return rank;
 };
@@ -47,12 +44,12 @@ void PmergeMe::setRank(int paramRank) {
 bool PmergeMe::getBigger() const {
     return bigger;
 };
-bool PmergeMe::setBigger(bool paramBigger) {
+void PmergeMe::setBigger(bool paramBigger) {
     bigger = paramBigger;
 };
-bool PmergeMe::getSorted() const {
-    return sorted;
+bool PmergeMe::getChecked() const {
+    return checked;
 };
-void PmergeMe::setSorted(bool paramSorted) {
-    sorted = paramSorted;
+void PmergeMe::setChecked(bool paramChecked) {
+    checked = paramChecked;
 };

@@ -1,9 +1,12 @@
 NAME	=	PmergeMe
 CC		=	c++
 FLAGS	=	-Wall -Wextra -Werror -std=c++20
-SRCS	=	main.cpp \
-			BitcoinExchange.cpp
-HEADER  =	BitcoinExchange.hpp
+SRCS	=	sources/main.cpp \
+			sources/PmergeMe.cpp \
+			sources/utils.cpp \
+			sources/sort.cpp
+HEADER  =	includes/PmergeMe.hpp \
+			includes/utils.hpp
 OBJS	=	$(SRCS:.cpp=.o)
 
 all: $(NAME)
