@@ -7,7 +7,6 @@ class PmergeMe
     private:
         int value;
         int rank;
-        int checked;
         int bigger;
 
     public:
@@ -19,10 +18,8 @@ class PmergeMe
 
         int     getValue() const;
         int     getRank() const;
-        bool    getChecked() const;
         bool    getBigger() const;
         void    setValue(int paramValue);
         void    setRank(int paramRank);
-        void    setChecked(bool paramChecked);
         void    setBigger(bool paramBigger);
 };

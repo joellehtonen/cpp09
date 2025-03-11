@@ -11,16 +11,6 @@ void giveNewRanks(T& container, int pairValue)
     }
 };
 
-//TODO REMAKE TO USE ITERATORS
-template <typename T>
-void uncheckAll(T& container)
-{
-    for (size_t i = 0; i < container.size(); i++)
-    {
-        container.at(i).setChecked(false);
-    }
-};
-
 template <typename T>
 void printContainerContents(const T& container)
 {

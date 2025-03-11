@@ -3,20 +3,17 @@
 PmergeMe::PmergeMe() { 
     value = 0;
     rank = 1;
-    checked = false;
     bigger = false;
 };
 PmergeMe::PmergeMe(std::string paramValue) { 
     value = stoi(paramValue);
     rank = 1;
-    checked = false;
     bigger = false;
 };
 PmergeMe::~PmergeMe() { };
 PmergeMe::PmergeMe(const PmergeMe& copy) { 
     value = copy.value;
     rank = copy.rank;
-    checked = copy.checked;
     bigger = copy.bigger;
 };
 PmergeMe& PmergeMe::operator=(const PmergeMe& copy) {
@@ -24,7 +21,6 @@ PmergeMe& PmergeMe::operator=(const PmergeMe& copy) {
     {
         value = copy.value;
         rank = copy.rank;
-        checked = copy.checked;
         bigger = copy.bigger;
     }
     return *this;
@@ -46,10 +42,4 @@ bool PmergeMe::getBigger() const {
 };
 void PmergeMe::setBigger(bool paramBigger) {
     bigger = paramBigger;
-};
-bool PmergeMe::getChecked() const {
-    return checked;
-};
-void PmergeMe::setChecked(bool paramChecked) {
-    checked = paramChecked;
 };
