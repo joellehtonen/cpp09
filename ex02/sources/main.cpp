@@ -13,7 +13,13 @@ int main (int ac, char** av)
         vctr.push_back(PmergeMe(av[i]));
     }
     printContainerContents(vctr);
-    sortVector(vctr);
+    try {
+        sortVector(vctr);
+    }
+    catch (std::exception& e) {
+        std::cerr << "Error. " << e.what() << "\n";
+    }
+    printContainerContents(vctr);
     //stop timer
     //print timer
     //same again with the other container

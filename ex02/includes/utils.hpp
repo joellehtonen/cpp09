@@ -3,33 +3,18 @@
 #include <vector>
 #include <list>
 
-void swapValues(PmergeMe one, PmergeMe two);
 void sortVector(std::vector<PmergeMe>& container);
+void firstComparison(std::vector<PmergeMe>& container);
+//void swapValues(PmergeMe& one, PmergeMe& two);
+void comparePairs(std::vector<PmergeMe>& container, size_t& i, size_t& pairValue);
 
 template <typename T>
-void giveNewRanks(T container, int pairValue)
-{
-    for (size_t i = 0; i < container.size(); i++)
-    {
-        container.at(i).setRank(i % pairValue + 1);
-    }
-};
+void giveNewRanks(T& container, int pairValue);
 
 template <typename T>
-void uncheckAll(T container)
-{
-    for (size_t i = 0; i < container.size(); i++)
-    {
-        container.at(i).setChecked(false);
-    }
-};
+void uncheckAll(T& container);
 
 template <typename T>
-void printContainerContents(const T& container)
-{
-    for (auto it : container)
-        std::cout << it.getValue() << " ";
-    // for (size_t  i = 0; i < container.size(); i++)
-    //     std::cout << container.at(i).getValue() << " ";
-    std::cout << std::endl;
-};
+void printContainerContents(const T& container);
+
+#include "../sources/utils.tpp"

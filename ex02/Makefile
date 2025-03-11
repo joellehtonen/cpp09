@@ -1,17 +1,17 @@
 NAME	=	PmergeMe
 CC		=	c++
-FLAGS	=	-Wall -Wextra -Werror -std=c++20
+FLAGS	=	-Wall -Wextra -Werror -std=c++20 -ggdb3
 SRCS	=	sources/main.cpp \
 			sources/PmergeMe.cpp \
-			sources/utils.cpp \
-			sources/sort.cpp
+			sources/utils.cpp
 HEADER  =	includes/PmergeMe.hpp \
 			includes/utils.hpp
+TEMPLATE =	sources/utils.tpp
 OBJS	=	$(SRCS:.cpp=.o)
 
 all: $(NAME)
 
-%.o: %.cpp $(HEADER)
+%.o: %.cpp $(HEADER) $(TEMPLATE)
 	@$(CC) $(FLAGS) -c $< -o $@
 
 $(NAME): $(OBJS)
@@ -25,4 +25,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean rey
