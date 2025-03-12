@@ -7,18 +7,8 @@ void sortVector(std::vector<PmergeMe>& container)
     firstComparison(container);
     printContainerContents(container); //TEST
     std::cout << "NEXT ROUND\n"; //TEST
-    for (size_t pairValue = 2; pairValue <= container.size() / 2; pairValue *= 2)
-    {
-        //giveNewRanks(container, pairValue);
-        for (size_t i = 0; i < container.size(); i += pairValue * 2)
-        {
-            if (i + pairValue * 2 > container.size())
-                break ;
-            comparePairs(container, i, pairValue);
-        }
-        std::cout << "NEXT ROUND\n"; //TEST
-        printContainerContents(container); //TEST
-    }
+    formPairs(container);
+    printGroups(container);
 };
 
 void firstComparison(std::vector<PmergeMe>& container)
@@ -33,6 +23,23 @@ void firstComparison(std::vector<PmergeMe>& container)
     }
 };
 
+void formPairs(std::vector<PmergeMe>& container)
+{
+    for (size_t pairValue = 2; pairValue <= container.size() / 2; pairValue *= 2)
+    {
+        //giveNewRanks(container, pairValue);
+        for (size_t i = 0; i < container.size(); i += pairValue * 2)
+        {
+            if (i + pairValue * 2 > container.size())
+                break ;
+            comparePairs(container, i, pairValue);
+        }
+        updateGroup(container, pairValue);
+        std::cout << "NEXT ROUND\n"; //TEST
+        printContainerContents(container); //TEST
+    }
+};
+
 void comparePairs(std::vector<PmergeMe>& container, size_t& i, size_t& pairValue)
 {
     size_t firstPairIndex = i + pairValue - 1;
@@ -41,6 +48,7 @@ void comparePairs(std::vector<PmergeMe>& container, size_t& i, size_t& pairValue
     std::cout << "comparing " << container.at(firstPairIndex).getValue() << " with " << container.at(secondPairIndex).getValue() << "\n";
     if (container.at(firstPairIndex).getValue() > container.at(secondPairIndex).getValue())
     {
+        std::cout << "swapping\n";
         for (size_t j = 0; j < pairValue; j++)
             std::swap(container.at(i + j), container.at(i + j + pairValue));
     }

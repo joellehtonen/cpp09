@@ -14,6 +14,7 @@ PmergeMe::~PmergeMe() { };
 PmergeMe::PmergeMe(const PmergeMe& copy) { 
     value = copy.value;
     rank = copy.rank;
+    group = copy.group;
     bigger = copy.bigger;
 };
 PmergeMe& PmergeMe::operator=(const PmergeMe& copy) {
@@ -21,6 +22,7 @@ PmergeMe& PmergeMe::operator=(const PmergeMe& copy) {
     {
         value = copy.value;
         rank = copy.rank;
+        group = copy.group;
         bigger = copy.bigger;
     }
     return *this;
@@ -36,6 +38,12 @@ int PmergeMe::getRank() const {
 };
 void PmergeMe::setRank(int paramRank) {
     rank = paramRank;
+};
+std::vector<int> PmergeMe::getGroup() const {
+    return group;
+};
+void PmergeMe::addGroup(int newGroup) {
+    group.push_back(newGroup);
 };
 bool PmergeMe::getBigger() const {
     return bigger;
