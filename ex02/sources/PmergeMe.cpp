@@ -39,6 +39,12 @@ int PmergeMe::getRank() const {
 void PmergeMe::setRank(int paramRank) {
     rank = paramRank;
 };
+int PmergeMe::getIndex() const {
+    return index;
+};
+void PmergeMe::setIndex(int paramIndex) {
+    index = paramIndex;
+};
 std::vector<int> PmergeMe::getGroup() const {
     return group;
 };

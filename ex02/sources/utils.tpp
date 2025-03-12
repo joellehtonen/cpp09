@@ -13,7 +13,7 @@ void giveNewRanks(T& container, int pairValue)
 
 //TODO REMAKE TO USE ITERATORS
 template <typename T>
-void updateGroup(T& container, int pairValue)
+void updateGroups(T& container, int pairValue)
 {
     int group = 0;
     int counter = 0;
