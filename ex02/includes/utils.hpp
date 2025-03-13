@@ -10,7 +10,9 @@ size_t	formPairs(std::vector<PmergeMe>& container);
 void	comparePairs(std::vector<PmergeMe>& container, size_t& i, size_t& pairValue);
 void	insertion(std::vector<PmergeMe>& container, size_t pairValue);
 void 	moveToPend(std::vector<PmergeMe>& container, std::vector<PmergeMe> pend, size_t pairValue, size_t moveIndex);
-void	giveIndexes(std::vector<PmergeMe> pend, size_t pairValue);
+void    giveIndexes(std::vector<PmergeMe>& container, std::vector<PmergeMe>& pend, size_t pairValue);
+void    insertToMain(std::vector<PmergeMe>& container, std::vector<PmergeMe> pend, size_t pairValue);
+size_t  findNextIndex(std::vector<PmergeMe> pend, size_t jacobNumber);
 
 template <typename T>
 void giveNewRanks(T& container, int pairValue);

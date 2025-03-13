@@ -74,8 +74,8 @@ void insertion(std::vector<PmergeMe>& container, size_t pairValue)
             else
                 moveToPend(container, pend, pairValue, comparisonIndex + 1);
         }
-        giveIndexes(pend, pairValue);
-        //do i need to add indexes for main too?
+        giveIndexes(container, pend, pairValue);
+        insertToMain
 
 
     }
@@ -92,9 +92,20 @@ void moveToPend(std::vector<PmergeMe>& container, std::vector<PmergeMe> pend, si
     }
 };
 
-void giveIndexes(std::vector<PmergeMe> pend, size_t pairValue)
+void giveIndexes(std::vector<PmergeMe>& container, std::vector<PmergeMe>& pend, size_t pairValue)
 {
-    int index = 2;
+    //give indexes to elements left in the container (the main)
+    int index = 0;
+    for (int i = 0; i < container.size(); i++)
+    {
+        for (int j = 0; j < pairValue; j++)
+        {
+            container.at(i).setIndex(index);
+        }
+        index++;
+    }
+    //give indexes to elements in the pend
+    index = 2;
     for (int i = 0; i < pend.size(); i++)
     {
         for (int j = 0; j < pairValue; j++)
@@ -104,3 +115,38 @@ void giveIndexes(std::vector<PmergeMe> pend, size_t pairValue)
         index++;
     }
 };
+
+void insertToMain(std::vector<PmergeMe>& container, std::vector<PmergeMe> pend, size_t pairValue)
+{
+    std::vector<int> jacobsthal = {1, 3, 5, 11, 21, 43, 85, 171, 341, 683, 1365, 2731, 5461};
+
+    for (size_t jacobIndex = 1; pend.empty() == true; jacobIndex++)
+    {
+        size_t index = findNextIndex(pend, jacobsthal.at(jacobIndex));
+        size_t lastIndex = jacobsthal.at(jacobIndex - 1) + 1;
+        std::cout << "LAST INDEX = " << lastIndex << std::endl; //TEST
+        for (; index >= lastIndex; index--)
+        {
+            auto it = pend.begin();
+            std::advance(it, index);
+            for (size_t i = 0; i < pairValue; i++)
+            {
+                pend.push_back(container.at(moveIndex));
+                it = container.erase(it);
+            }
+        }
+    }
+};
+
+size_t findNextIndex(std::vector<PmergeMe> pend, size_t jacobNumber)
+{
+    size_t index;
+    size_t lastElement = pend.size() - 1;
+    for (size_t i = 0; i < lastElement; i++)
+    {
+        index = pend.at(i).getIndex();
+        if (index == jacobNumber)
+            return index;
+    }
+    return lastElement;
+}

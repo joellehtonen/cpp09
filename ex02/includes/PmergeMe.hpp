@@ -10,7 +10,6 @@ class PmergeMe
         int                 rank;
         std::vector<int>    group;
         int                 index;
-        bool                bigger;
 
     public:
         PmergeMe();
@@ -23,10 +22,8 @@ class PmergeMe
         int                 getRank() const;
         std::vector<int>    getGroup() const;
         int                 getIndex() const;
-        bool                getBigger() const;
         void    setValue(int paramValue);
         void    setRank(int paramRank);
         void    addGroup(int newGroup);
         void    setIndex(int paramIndex);
-        void    setBigger(bool paramBigger);
 };

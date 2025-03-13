@@ -3,27 +3,27 @@
 PmergeMe::PmergeMe() { 
     value = 0;
     rank = 1;
-    bigger = false;
+    index = 0;
 };
 PmergeMe::PmergeMe(std::string paramValue) { 
     value = stoi(paramValue);
     rank = 1;
-    bigger = false;
+    index = 0;
 };
 PmergeMe::~PmergeMe() { };
 PmergeMe::PmergeMe(const PmergeMe& copy) { 
     value = copy.value;
     rank = copy.rank;
+    index = copy.index;
     group = copy.group;
-    bigger = copy.bigger;
 };
 PmergeMe& PmergeMe::operator=(const PmergeMe& copy) {
     if (this != &copy)
     {
         value = copy.value;
         rank = copy.rank;
+        index = copy.index;
         group = copy.group;
-        bigger = copy.bigger;
     }
     return *this;
 };
@@ -50,10 +50,4 @@ std::vector<int> PmergeMe::getGroup() const {
 };
 void PmergeMe::addGroup(int newGroup) {
     group.push_back(newGroup);
-};
-bool PmergeMe::getBigger() const {
-    return bigger;
-};
-void PmergeMe::setBigger(bool paramBigger) {
-    bigger = paramBigger;
 };
