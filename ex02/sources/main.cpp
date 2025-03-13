@@ -7,6 +7,7 @@ int main (int ac, char** av)
     std::list<PmergeMe>     lst;
     //check if input only valid digits
     //check for duplicates
+    //check if already sorted
     //start timer
     for (int i = 1; i < ac; i++)
     {

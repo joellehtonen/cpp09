@@ -7,9 +7,11 @@ class PmergeMe
 {
     private:
         int                 value;
-        int                 rank;
-        std::vector<int>    group;
+        int                 rank; //mostly for demonstration
+        std::vector<int>    group; //mostly for demonstration
         int                 index;
+        char                letter;
+
 
     public:
         PmergeMe();
@@ -22,8 +24,10 @@ class PmergeMe
         int                 getRank() const;
         std::vector<int>    getGroup() const;
         int                 getIndex() const;
+        char                getLetter() const;
         void    setValue(int paramValue);
         void    setRank(int paramRank);
         void    addGroup(int newGroup);
         void    setIndex(int paramIndex);
+        void    setLetter(char paramLetter);
 };
