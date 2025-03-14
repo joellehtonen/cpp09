@@ -58,7 +58,7 @@ void comparePairs(std::vector<PmergeMe>& container, size_t& i, size_t& pairValue
     }
 };
 
-void insertion(std::vector<PmergeMe>& container, size_t& pairValue)
+void insertion(std::vector<PmergeMe>& main, size_t& pairValue)
 {
     std::vector<PmergeMe> pend;
 
@@ -66,98 +66,121 @@ void insertion(std::vector<PmergeMe>& container, size_t& pairValue)
     {
         std::cout << "pair value = " << pairValue << std::endl;
         size_t comparisonIndex = pairValue * 3 - 1;
-        if (comparisonIndex > container.size())
+        if (comparisonIndex > main.size())
             continue ;
         size_t pendIndex = 2;
-        while (comparisonIndex + pairValue < container.size())
+        while (comparisonIndex < main.size())
         {
-            std::cout << "comparing " << container.at(comparisonIndex).getValue();
-            std::cout << " with " << container.at(comparisonIndex + pairValue).getValue() << std::endl;
-            if (container.at(comparisonIndex).getValue() < container.at(comparisonIndex + pairValue).getValue())
-                moveToPend(container, pend, pairValue, comparisonIndex - pairValue + 1, pendIndex);
+            if (comparisonIndex + pairValue > main.size())
+            {
+                std::cout << "moving " << main.at(comparisonIndex).getValue() << " to pend\n";
+                moveToPend(main, pend, pairValue, comparisonIndex - pairValue + 1, pendIndex);
+            }
             else
-                moveToPend(container, pend, pairValue, comparisonIndex + 1, pendIndex);
+            {
+                std::cout << "comparing " << main.at(comparisonIndex).getValue();
+                std::cout << " with " << main.at(comparisonIndex + pairValue).getValue() << std::endl;
+                if (main.at(comparisonIndex).getValue() < main.at(comparisonIndex + pairValue).getValue())
+                    moveToPend(main, pend, pairValue, comparisonIndex - pairValue + 1, pendIndex);
+                else
+                    moveToPend(main, pend, pairValue, comparisonIndex + 1, pendIndex);
+            }
             comparisonIndex += pairValue;
             pendIndex++;
         }
-        giveIndexes(container, pairValue);
-        insertBackToMain(container, pend, pairValue);
-        printContainerContents(container);
+        giveIndexes(main, pairValue);
+        printIndexes(main, pend);
+        insertBackToMain(main, pend, pairValue);
+        printContainerContents(main);
     }
 };
 
-void moveToPend(std::vector<PmergeMe>& container, std::vector<PmergeMe>& pend, const size_t& pairValue, const size_t& moveIndex, const size_t& pendIndex)
+void moveToPend(std::vector<PmergeMe>& main, std::vector<PmergeMe>& pend, const size_t& pairValue, const size_t& moveIndex, const size_t& pendIndex)
 {
-    auto it = container.begin();
+    auto it = main.begin();
     std::advance(it, moveIndex);
     for (size_t i = 0; i < pairValue; i++)
     {
-        container.at(moveIndex).setIndex(pendIndex);
-        container.at(moveIndex).setLetter('B');
-        pend.push_back(container.at(moveIndex));
-        it = container.erase(it);
+        main.at(moveIndex).setIndex(pendIndex);
+        main.at(moveIndex).setLetter('B');
+        pend.push_back(main.at(moveIndex));
+        it = main.erase(it);
     }
     std::cout << "in the pend now: ";
     printContainerContents(pend);
     std::cout << "in the main now: ";
-    printContainerContents(container);
+    printContainerContents(main);
     std::cout << std::endl;
 };
 
-void giveIndexes(std::vector<PmergeMe>& container, const size_t& pairValue)
+void giveIndexes(std::vector<PmergeMe>& main, const size_t& pairValue)
 {
     //special case for the first element in the main
-    container.at(0).setIndex(1);
-    container.at(0).setLetter('B');
+    for (size_t i = 0; i < pairValue; i++)
+    {
+        main.at(i).setIndex(1);
+        main.at(i).setLetter('B');
+    }
     //give indexes to other elements left in the container (the main)
     int index = 1;
-    for (size_t i = 1; i < container.size(); i++)
+    for (size_t i = pairValue, pair = 0; i < main.size(); i++)
     {
-        for (size_t j = 0; j < pairValue; j++)
+        main.at(i).setIndex(index);
+        main.at(i).setLetter('A');
+        pair++;
+        if (pair == pairValue)
         {
-            container.at(i).setIndex(index);
-            container.at(i).setLetter('A');
+            pair = 0;
+            index++;
         }
-        index++;
     }
 };
 
-void insertBackToMain(std::vector<PmergeMe>& container, std::vector<PmergeMe>& pend, const size_t& pairValue)
+void insertBackToMain(std::vector<PmergeMe>& main, std::vector<PmergeMe>& pend, const size_t& pairValue)
 {
     std::vector<int> jacobsthal = {1, 3, 5, 11, 21, 43, 85, 171, 341, 683, 1365, 2731, 5461};
 
     for (size_t jacobIndex = 1; pend.empty() == false; jacobIndex++)
     {
         const_iterator elementCompPos = findNextPosition(pend, jacobsthal.at(jacobIndex), pairValue);
-        const_iterator elementMovePos = elementCompPos - pairValue - 1;
+        const_iterator elementMovePos = elementCompPos - (pairValue  - 1);
         const_iterator lastPos = findLastPosition(pend, jacobsthal.at(jacobIndex - 1) + 1);
-        const_iterator insertPos = findTargetPosition(container, *elementCompPos, pairValue);
         std::cout << "TARGET INDEX = " << elementCompPos->getIndex() << std::endl; //TEST
         std::cout << "TARGET VALUE = " << elementCompPos->getValue() << std::endl; //TEST
-        std::cout << "LAST INDEX = " << lastPos->getIndex() << std::endl; //TEST
+        std::cout << "LAST VALUE = " << lastPos->getValue() << std::endl; //TEST
         std::cout << "FIRST TO MOVE = " << elementMovePos->getValue() << std::endl; //TEST
-        for (; elementCompPos >= lastPos; elementCompPos--)
+        while (elementCompPos >= lastPos)
         {
+            const_iterator insertPos = findTargetPosition(main, *elementCompPos, pairValue);
             for (size_t i = 0; i < pairValue; i++)
             {
                 std::cout << "inserting " << elementMovePos->getValue() << " into index " << insertPos->getIndex() << std::endl;
-                container.insert(insertPos, *elementMovePos);
+                main.insert(insertPos, *elementMovePos);
                 pend.erase(elementMovePos);
                 insertPos++;
             }
-            //std::cout << "one pair done\n";
+            elementCompPos = findNextPosition(pend, jacobsthal.at(jacobIndex), pairValue);
+            elementMovePos = elementCompPos - (pairValue  - 1);
+            std::cout << "one pair done\n";
+            std::cout << "in the pend now: ";
+            printContainerContents(pend);
+            std::cout << "in the main now: ";
+            printContainerContents(main);
         }
     }
 };
 
 const_iterator findNextPosition(std::vector<PmergeMe>& pend, const int& jacobNumber, const size_t& pairValue)
 {
-    std::cout << "pair value = " << pairValue << std::endl;
+    // auto it = std::lower_bound(pend.begin(), pend.end(), jacobNumber);
+    // if (it != pend.end())
+    //     return it + (pairValue - 1);
+    // else
+    //     return pend.end() - 1;
     for (auto it = pend.begin(); it != pend.end(); it++)
     {
-        // std::cout << "index of " << it->getValue() << " is " << it->getIndex() << std::endl;
         if (it->getIndex() == jacobNumber)
-            return it;
+            return it + (pairValue - 1);
     }
     return pend.end() - 1;
 };
@@ -172,15 +195,15 @@ const_iterator findLastPosition(std::vector<PmergeMe>& pend, const int& jacobNum
     return pend.begin();
 };
 
-const_iterator findTargetPosition(std::vector<PmergeMe>& container, const PmergeMe& element, const size_t& pairValue)
+const_iterator findTargetPosition(std::vector<PmergeMe>& main, const PmergeMe& element, const size_t& pairValue)
 {
-    for (auto it = container.begin() + pairValue - 1; it != container.end(); it += pairValue)
+    for (auto it = main.begin() + pairValue - 1; it != main.end(); it += pairValue)
     {
         std::cout << "comparing " << element.getValue() << " with " << it->getValue() << std::endl;
         if (element.getValue() < it->getValue())
-            return it;
+            return it - (pairValue - 1);
         if (element.getIndex() <= it->getIndex() && it->getLetter() == 'A')
-            return it;
+            return it - (pairValue - 1);
     }
-    return container.begin();
+    return main.begin();
 };

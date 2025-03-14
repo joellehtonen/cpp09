@@ -9,9 +9,3 @@ use class as a struct
 11 2 17 0 16 8 6 15 10 3 21 1 18 9 14 19 12 5 4 20 13 7
 
 allow both 1 2 3 and "1 2 3" as inputs
-
-struct: 
-int value
-int rank
-boolean bigger;
-boolean done;
