@@ -7,7 +7,7 @@ void giveNewRanks(T& container, int pairValue)
     for (size_t i = 0; i < container.size(); i++)
     {
         container.at(i).setRank(i % pairValue + 1);
-		std::cout << "number " << container.at(i).getValue() << " has rank " << container.at(i).getRank() << "\n";
+		std::cout << std::left << "number: " << std::setw(8) << container.at(i).getValue() << " rank: " << std::setw(16) << container.at(i).getRank() << std::endl;
     }
 };
 
