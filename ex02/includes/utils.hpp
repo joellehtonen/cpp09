@@ -35,4 +35,7 @@ void printIndexes(const T& main, const T& pend);
 template <typename T>
 void printContainerContents(const T& container);
 
+template <typename T>
+bool checkResultOrder(const T& container);
+
 #include "../sources/utils.tpp"

@@ -21,6 +21,7 @@ int main (int ac, char** av)
         std::cerr << "Error. " << e.what() << "\n";
     }
     printContainerContents(vctr);
+    checkResultOrder(vctr);
     //stop timer
     //print timer
     //same again with the other container

@@ -67,3 +67,22 @@ void printContainerContents(const T& container)
         std::cout << it.getValue() << " ";
     std::cout << std::endl;
 };
+
+template <typename T>
+bool checkResultOrder(const T& container)
+{
+    for (auto it = container.begin(); it != container.end(); it++)
+    {
+        auto itNext = it;
+        itNext++;
+        if (itNext == container.end())
+            break ;
+        if (it->getValue() > itNext->getValue())
+        {
+            std::cout << "The container is NOT sorted\n";
+            return false;
+        }
+    }
+    std::cout << "The container is sorted\n";
+    return true ;
+};
