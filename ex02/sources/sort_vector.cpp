@@ -195,7 +195,7 @@ void insertBackToMain(std::vector<PmergeMe>& main, std::vector<PmergeMe>& pend, 
 
 const_iterator findNextPosition(std::vector<PmergeMe>& pend, const int& jacobNumber, const size_t& pairValue)
 {
-    for (auto it = pend.begin(); it != pend.end(); it++)
+    for (auto it = pend.begin(); it < pend.end(); it++)
     {
         if (it->getIndex() == jacobNumber)
             return it + (pairValue - 1);
@@ -205,7 +205,7 @@ const_iterator findNextPosition(std::vector<PmergeMe>& pend, const int& jacobNum
 
 const_iterator findLastPosition(std::vector<PmergeMe>& pend, const int& jacobNumber)
 {
-    for (auto it = pend.begin(); it != pend.end(); it++)
+    for (auto it = pend.begin(); it < pend.end(); it++)
     {
         if (it->getIndex() == jacobNumber)
             return it;
@@ -215,8 +215,10 @@ const_iterator findLastPosition(std::vector<PmergeMe>& pend, const int& jacobNum
 
 const_iterator findTargetPosition(std::vector<PmergeMe>& main, const PmergeMe& element, const size_t& pairValue)
 {
-    for (auto it = main.begin() + pairValue - 1; it != main.end(); it += pairValue)
+    for (auto it = main.begin() + pairValue - 1; it < main.end(); it += pairValue)
     {
+        if (it >= main.end())
+            break ;
         if (COMMENTS)
             std::cout << "comparing " << element.getValue() << " with " << it->getValue() << std::endl;
         if (!compare(element, *it))
