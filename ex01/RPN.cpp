@@ -46,7 +46,11 @@ void RPN::calculate(std::string originalArgument)
     if (operationDone == true)
     {
         int finalResult = calculator.top();
-        std::cout << finalResult << std::endl;
+        calculator.pop();
+        if (calculator.empty() == false)
+            throw std::runtime_error("Invalid input");
+        else
+            std::cout << finalResult << std::endl;
     }
     else
     {
@@ -60,7 +64,11 @@ int RPN::arithmetic(int& first, int& second, std::string& part) {
     if (part == "-")
         return (first - second);
     if (part == "/")
+    {
+        if (first == 0 || second == 0)
+            throw std::runtime_error("Cannot divide by zero");
         return (first / second);
+    }
     if (part == "*")
         return (first * second);
     return (0);

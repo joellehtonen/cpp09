@@ -49,6 +49,17 @@
         "ctime": "cpp",
         "iomanip": "cpp",
         "sstream": "cpp",
-        "list": "cpp"
+        "list": "cpp",
+        "*.tpp": "cpp",
+        "charconv": "cpp",
+        "chrono": "cpp",
+        "cstring": "cpp",
+        "optional": "cpp",
+        "ratio": "cpp",
+        "format": "cpp",
+        "span": "cpp",
+        "text_encoding": "cpp",
+        "cinttypes": "cpp",
+        "variant": "cpp"
     }
 }

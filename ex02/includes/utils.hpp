@@ -4,7 +4,7 @@
 #include <list>
 #include <iomanip>
 #include <algorithm>
-#define COMMENTS 0
+#define COMMENTS 1
 
 typedef std::vector<PmergeMe>::const_iterator const_iterator;
 
@@ -37,5 +37,8 @@ void printContainerContents(const T& container);
 
 template <typename T>
 bool checkResultOrder(const T& container);
+
+bool compare(const PmergeMe& ref1, const PmergeMe& ref2);
+void printComparisonAmount();
 
 #include "../sources/utils.tpp"

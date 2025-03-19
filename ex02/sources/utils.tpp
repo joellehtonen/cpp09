@@ -33,12 +33,13 @@ void updateGroups(T& container, int pairValue)
 template <typename T>
 void printGroups(const T& container)
 {
+    std::cout << "GROUPS: \n";
     for (size_t i = 0; i < container.size(); i++)
     {
-        std::cout << std::left << std::setw(8) << (std::to_string(container.at(i).getValue()) + " --> ");
+        std::cout << std::left << std::setw(16) << (std::to_string(container.at(i).getValue()) + " --> ");
         std::vector<int> printThis = container.at(i).getGroup();
         for (const int it : printThis)
-            std::cout << std::setw(4) << it << " ";
+            std::cout << std::setw(8) << it << " ";
         std::cout << std::endl;
 	}
 };

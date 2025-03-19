@@ -9,6 +9,7 @@ void sortVector(std::vector<PmergeMe>& container)
     if (COMMENTS)
         printGroups(container);
     insertion(container, pairValue);
+    printComparisonAmount();
 };
 
 void firstComparison(std::vector<PmergeMe>& container)
@@ -19,7 +20,7 @@ void firstComparison(std::vector<PmergeMe>& container)
             break ;
         if (COMMENTS)
             std::cout << "comparing " << container.at(i).getValue() << " with " << container.at(i + 1).getValue() << "\n";
-        if (container.at(i).getValue() > container.at(i + 1).getValue())
+        if (compare(container.at(i), container.at(i + 1)))
         {
             std::swap(container.at(i), container.at(i + 1));
             if (COMMENTS)
@@ -59,7 +60,7 @@ void comparePairs(std::vector<PmergeMe>& container, size_t& i, size_t& pairValue
     //check for sizes?
     if (COMMENTS)
         std::cout << "comparing " << container.at(firstPairIndex).getValue() << " with " << container.at(secondPairIndex).getValue() << "\n";
-    if (container.at(firstPairIndex).getValue() > container.at(secondPairIndex).getValue())
+    if (compare(container.at(firstPairIndex), container.at(secondPairIndex)))
     {
         if (COMMENTS)
             std::cout << "swapping\n";
@@ -92,10 +93,10 @@ void insertion(std::vector<PmergeMe>& main, size_t& pairValue)
             {
                 if (COMMENTS)
                     std::cout << "comparing " << main.at(comparisonIndex).getValue() << " with " << main.at(comparisonIndex + pairValue).getValue() << std::endl;
-                if (main.at(comparisonIndex).getValue() < main.at(comparisonIndex + pairValue).getValue())
-                    moveToPend(main, pend, pairValue, comparisonIndex - pairValue + 1, pendIndex);
-                else
+                if (compare(main.at(comparisonIndex), main.at(comparisonIndex + pairValue)))
                     moveToPend(main, pend, pairValue, comparisonIndex + 1, pendIndex);
+                else
+                    moveToPend(main, pend, pairValue, comparisonIndex - pairValue + 1, pendIndex);
             }
             comparisonIndex += pairValue;
             pendIndex++;
@@ -218,10 +219,18 @@ const_iterator findTargetPosition(std::vector<PmergeMe>& main, const PmergeMe& e
     {
         if (COMMENTS)
             std::cout << "comparing " << element.getValue() << " with " << it->getValue() << std::endl;
-        if (element.getValue() < it->getValue())
+        if (!compare(element, *it))
+        {
+            if (COMMENTS)
+                std::cout << "smaller value found\n";
             return it - (pairValue - 1);
-        if (element.getIndex() <= it->getIndex() && it->getLetter() == 'A')
+        }
+        if (element.getIndex() == it->getIndex() && it->getLetter() == 'A')
+        { 
+            if (COMMENTS)
+                std::cout << "limit found\n";
             return it - (pairValue - 1);
+        }
     }
-    return main.begin();
+    return main.end() - 1;
 };

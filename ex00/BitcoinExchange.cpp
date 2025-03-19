@@ -122,7 +122,7 @@ bool BitcoinExchange::checkDateFormat(tm date1)
 		return false;
 	}
 	return true;
-}
+};
 
 bool BitcoinExchange::checkIfFutureDate(tm ref)
 {
@@ -138,7 +138,7 @@ bool BitcoinExchange::checkIfFutureDate(tm ref)
 		&& ref.tm_mday > today.tm_mday)
 		return true;
 	return false;
-}
+};
 
 int BitcoinExchange::convertStringToInt(std::string& keyString)
 {
@@ -149,25 +149,23 @@ int BitcoinExchange::convertStringToInt(std::string& keyString)
 		keyString.erase(i, 1);
 	}
 	return stoi(keyString);
-}
+};
 
 void BitcoinExchange::processInput(const int& key, const float& value, const std::string& keyString)
 {
 	std::map<int, float>::const_reverse_iterator dataIt = _data.crbegin();
 	while (dataIt != _data.crend() && key < dataIt->first)
 		dataIt++;
-	//if (dataIt == _data.crend())
-	//	dataIt = _data.crbegin();
 	if (value < 0 )
 		printError(ERROR_NOT_POSITIVE);
-	else if (value >= INT_MAX)
+	else if (value > 1000)
 		printError(ERROR_INT_MAX);
 	else
 	{
 		printDate(keyString);
 		printEquation(value, dataIt);
 	}
-}
+};
 
 void BitcoinExchange::printDate(const std::string& keyString)
 {
@@ -177,7 +175,7 @@ void BitcoinExchange::printDate(const std::string& keyString)
 		if (i == 3 || i == 5)
 			std::cout << '-';
 	}
-}
+};
 
 void BitcoinExchange::printEquation(const float& value, std::map<int,float>::const_reverse_iterator& dataIt)
 {

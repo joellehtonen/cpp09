@@ -1,6 +1,8 @@
 #include "../includes/PmergeMe.hpp"
 #include "../includes/utils.hpp"
 
+size_t comparisons = 0;
+
 bool checkDuplicates(int ac, char** av)
 {
 	std::vector<char*> checked;
@@ -22,4 +24,18 @@ bool checkOrder(int ac, char** av)
 			return false;
 	}
 	return true;
+}
+
+bool compare(const PmergeMe& ref1, const PmergeMe& ref2)
+{
+	comparisons++;
+	if (ref1.getValue() > ref2.getValue())
+		return true;
+	else
+		return false;
+}
+
+void printComparisonAmount()
+{
+	std::cout << "Number of comparisons: " << comparisons << std::endl;
 }
