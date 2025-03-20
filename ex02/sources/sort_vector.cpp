@@ -7,7 +7,10 @@ void sortVector(std::vector<PmergeMe>& container)
     firstComparison(container);
     size_t pairValue = formPairs(container);
     if (COMMENTS)
+    {
         printGroups(container);
+        printComparisonAmount();
+    }
     insertion(container, pairValue);
     printComparisonAmount();
 };
@@ -57,7 +60,6 @@ void comparePairs(std::vector<PmergeMe>& container, size_t& i, size_t& pairValue
     size_t firstPairIndex = i + pairValue - 1;
     size_t secondPairIndex = i + pairValue * 2 - 1;
 
-    //check for sizes?
     if (COMMENTS)
         std::cout << "comparing " << container.at(firstPairIndex).getValue() << " with " << container.at(secondPairIndex).getValue() << "\n";
     if (compare(container.at(firstPairIndex), container.at(secondPairIndex)))
@@ -116,9 +118,9 @@ void moveToPend(std::vector<PmergeMe>& main, std::vector<PmergeMe>& pend, const 
     std::advance(it, moveIndex);
     for (size_t i = 0; i < pairValue; i++)
     {
-        main.at(moveIndex).setIndex(pendIndex);
-        main.at(moveIndex).setLetter('B');
-        pend.push_back(main.at(moveIndex));
+        it->setIndex(pendIndex);
+        it->setLetter('B');
+        pend.push_back(*it);
         it = main.erase(it);
     }
     if (COMMENTS)
@@ -159,9 +161,9 @@ void insertBackToMain(std::vector<PmergeMe>& main, std::vector<PmergeMe>& pend, 
 
     for (size_t jacobIndex = 1; pend.empty() == false; jacobIndex++)
     {
-        const_iterator elementCompPos = findNextPosition(pend, jacobsthal.at(jacobIndex), pairValue);
-        const_iterator elementMovePos = elementCompPos - (pairValue  - 1);
-        const_iterator lastPos = findLastPosition(pend, jacobsthal.at(jacobIndex - 1) + 1);
+        const_iterator_vector elementCompPos = findNextPosition(pend, jacobsthal.at(jacobIndex), pairValue);
+        const_iterator_vector elementMovePos = elementCompPos - (pairValue  - 1);
+        const_iterator_vector lastPos = findLastPosition(pend, jacobsthal.at(jacobIndex - 1) + 1);
         if (COMMENTS)
         {
             std::cout << "TARGET INDEX = " << elementCompPos->getIndex() << std::endl;
@@ -171,7 +173,7 @@ void insertBackToMain(std::vector<PmergeMe>& main, std::vector<PmergeMe>& pend, 
         }
         while (elementCompPos >= lastPos)
         {
-            const_iterator insertPos = findTargetPosition(main, *elementCompPos, pairValue);
+            const_iterator_vector insertPos = findTargetPosition(main, *elementCompPos, pairValue);
             for (size_t i = 0; i < pairValue; i++)
             {
                 if (COMMENTS)
@@ -193,7 +195,7 @@ void insertBackToMain(std::vector<PmergeMe>& main, std::vector<PmergeMe>& pend, 
     }
 };
 
-const_iterator findNextPosition(std::vector<PmergeMe>& pend, const int& jacobNumber, const size_t& pairValue)
+const_iterator_vector findNextPosition(std::vector<PmergeMe>& pend, const int& jacobNumber, const size_t& pairValue)
 {
     for (auto it = pend.begin(); it < pend.end(); it++)
     {
@@ -203,7 +205,7 @@ const_iterator findNextPosition(std::vector<PmergeMe>& pend, const int& jacobNum
     return pend.end() - 1;
 };
 
-const_iterator findLastPosition(std::vector<PmergeMe>& pend, const int& jacobNumber)
+const_iterator_vector findLastPosition(std::vector<PmergeMe>& pend, const int& jacobNumber)
 {
     for (auto it = pend.begin(); it < pend.end(); it++)
     {
@@ -213,7 +215,7 @@ const_iterator findLastPosition(std::vector<PmergeMe>& pend, const int& jacobNum
     return pend.begin();
 };
 
-const_iterator findTargetPosition(std::vector<PmergeMe>& main, const PmergeMe& element, const size_t& pairValue)
+const_iterator_vector findTargetPosition(std::vector<PmergeMe>& main, const PmergeMe& element, const size_t& pairValue)
 {
     for (auto it = main.begin() + pairValue - 1; it < main.end(); it += pairValue)
     {
@@ -221,6 +223,7 @@ const_iterator findTargetPosition(std::vector<PmergeMe>& main, const PmergeMe& e
             break ;
         if (COMMENTS)
             std::cout << "comparing " << element.getValue() << " with " << it->getValue() << std::endl;
+        //if (element.getValue() < it->getValue())
         if (!compare(element, *it))
         {
             if (COMMENTS)

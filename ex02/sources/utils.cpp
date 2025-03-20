@@ -3,6 +3,18 @@
 
 size_t comparisons = 0;
 
+bool checkDigits(int ac, char**av)
+{
+	std::string args;
+	for (int i = 2; i < ac; i++)
+	{
+		args += av[i];
+	}
+	if (args.find_first_not_of("01234567890") != std::string::npos)
+		return false;
+	return true;
+}
+
 bool checkDuplicates(int ac, char** av)
 {
 	std::vector<char*> checked;
@@ -10,10 +22,10 @@ bool checkDuplicates(int ac, char** av)
 	for (int i = 2; i < ac; i++)
 	{
 		if (std::find(checked.begin(), checked.end(), av[i]) != checked.end())
-			return true;
+			return false;
 		checked.push_back(av[i]);
 	}
-	return false;
+	return true;
 }
 
 bool checkOrder(int ac, char** av)

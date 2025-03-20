@@ -2,36 +2,42 @@
 #include "../includes/utils.hpp"
 
 // comparing/swapping each number (1), then pair (2), and then pair of pairs (4), etc, 8, 16, 32... 
-void sortVector(std::vector<PmergeMe>& container)
+void sortList(std::list<PmergeMe>& container)
 {
     firstComparison(container);
     size_t pairValue = formPairs(container);
     if (COMMENTS)
+    {
         printGroups(container);
+        printComparisonAmount();
+    }
     insertion(container, pairValue);
+    printComparisonAmount();
 };
 
-void firstComparison(std::vector<PmergeMe>& container)
+void firstComparison(std::list<PmergeMe>& container)
 {
-    for (size_t i = 0; i < container.size(); i += 2)
+    for (auto it = container.begin(); it != container.end();)
     {
-        if (i + 1 >= container.size())
+        auto next = std::next(it);
+        if (next == container.end())
             break ;
         if (COMMENTS)
-            std::cout << "comparing " << container.at(i).getValue() << " with " << container.at(i + 1).getValue() << "\n";
-        if (container.at(i).getValue() > container.at(i + 1).getValue())
+            std::cout << "comparing " << it->getValue() << " with " << next->getValue() << "\n";
+        if (compare(*it, *next))
         {
-            std::swap(container.at(i), container.at(i + 1));
+            std::swap(*it, *next);
             if (COMMENTS)
                 std::cout << "swap\n";
         }
+        std::advance(it, 2);
     }
 };
 
-size_t formPairs(std::vector<PmergeMe>& container)
+size_t formPairs(std::list<PmergeMe>& container)
 {
     if (COMMENTS)
-        printContainerContents(container); //TEST
+        printContainerContents(container);
     size_t pairValue = 2;
     size_t maxSize = container.size() / 2;
     for (; pairValue <= maxSize; pairValue *= 2)
@@ -46,31 +52,39 @@ size_t formPairs(std::vector<PmergeMe>& container)
         }
         updateGroups(container, pairValue);
         if (COMMENTS)
-            printContainerContents(container); //TEST
+            printContainerContents(container);
     }
     return pairValue / 2;
 };
 
-void comparePairs(std::vector<PmergeMe>& container, size_t& i, size_t& pairValue)
+void comparePairs(std::list<PmergeMe>& container, size_t& i, size_t& pairValue)
 {
-    size_t firstPairIndex = i + pairValue - 1;
-    size_t secondPairIndex = i + pairValue * 2 - 1;
+    auto firstPairIterator = container.begin();
+    std::advance(firstPairIterator, i + pairValue - 1);
 
-    //check for sizes?
+    auto secondPairIterator = container.begin();
+    std::advance(secondPairIterator, i + pairValue * 2 - 1);
+
     if (COMMENTS)
-        std::cout << "comparing " << container.at(firstPairIndex).getValue() << " with " << container.at(secondPairIndex).getValue() << "\n";
-    if (container.at(firstPairIndex).getValue() > container.at(secondPairIndex).getValue())
+        std::cout << "comparing " << firstPairIterator->getValue() << " with " << secondPairIterator->getValue() << "\n";
+    if (compare(*firstPairIterator, *secondPairIterator))
     {
         if (COMMENTS)
             std::cout << "swapping\n";
+        std::advance(firstPairIterator, -(pairValue - 1));
+        std::advance(secondPairIterator, -(pairValue - 1));
         for (size_t j = 0; j < pairValue; j++)
-            std::swap(container.at(i + j), container.at(i + j + pairValue));
+        {
+            std::swap(*firstPairIterator, *secondPairIterator);
+            firstPairIterator++;
+            secondPairIterator++;
+        }
     }
 };
 
-void insertion(std::vector<PmergeMe>& main, size_t& pairValue)
+void insertion(std::list<PmergeMe>& main, size_t& pairValue)
 {
-    std::vector<PmergeMe> pend;
+    std::list<PmergeMe> pend;
 
     for (; pairValue >= 1; pairValue /= 2)
     {
@@ -80,22 +94,26 @@ void insertion(std::vector<PmergeMe>& main, size_t& pairValue)
         if (comparisonIndex > main.size())
             continue ;
         size_t pendIndex = 2;
+        auto it = main.begin();
+        std::advance(it, comparisonIndex);
+        auto it2 = it;
+        std::advance(it2, pairValue);
         while (comparisonIndex < main.size())
         {
-            if (comparisonIndex + pairValue > main.size())
+            if (comparisonIndex + pairValue >= main.size())
             {
                 if (COMMENTS)
-                    std::cout << "moving " << main.at(comparisonIndex).getValue() << " to pend\n";
+                    std::cout << "moving " << it->getValue() << " to pend\n";
                 moveToPend(main, pend, pairValue, comparisonIndex - pairValue + 1, pendIndex);
             }
             else
             {
                 if (COMMENTS)
-                    std::cout << "comparing " << main.at(comparisonIndex).getValue() << " with " << main.at(comparisonIndex + pairValue).getValue() << std::endl;
-                if (main.at(comparisonIndex).getValue() < main.at(comparisonIndex + pairValue).getValue())
-                    moveToPend(main, pend, pairValue, comparisonIndex - pairValue + 1, pendIndex);
-                else
+                    std::cout << "comparing " << it->getValue() << " with " << it2->getValue() << std::endl;
+                if (compare(*it, *it2))
                     moveToPend(main, pend, pairValue, comparisonIndex + 1, pendIndex);
+                else
+                    moveToPend(main, pend, pairValue, comparisonIndex - pairValue + 1, pendIndex);
             }
             comparisonIndex += pairValue;
             pendIndex++;
@@ -109,15 +127,15 @@ void insertion(std::vector<PmergeMe>& main, size_t& pairValue)
     }
 };
 
-void moveToPend(std::vector<PmergeMe>& main, std::vector<PmergeMe>& pend, const size_t& pairValue, const size_t& moveIndex, const size_t& pendIndex)
+void moveToPend(std::list<PmergeMe>& main, std::list<PmergeMe>& pend, const size_t& pairValue, const size_t& moveIndex, const size_t& pendIndex)
 {
     auto it = main.begin();
     std::advance(it, moveIndex);
     for (size_t i = 0; i < pairValue; i++)
     {
-        main.at(moveIndex).setIndex(pendIndex);
-        main.at(moveIndex).setLetter('B');
-        pend.push_back(main.at(moveIndex));
+        it->setIndex(pendIndex);
+        it->setLetter('B');
+        pend.push_back(*it);
         it = main.erase(it);
     }
     if (COMMENTS)
@@ -129,20 +147,22 @@ void moveToPend(std::vector<PmergeMe>& main, std::vector<PmergeMe>& pend, const 
     }
 };
 
-void giveIndexes(std::vector<PmergeMe>& main, const size_t& pairValue)
+void giveIndexes(std::list<PmergeMe>& main, const size_t& pairValue)
 {
     //special case for the first element in the main
-    for (size_t i = 0; i < pairValue; i++)
+    auto it = main.begin();
+    for (size_t i = 0; i < pairValue && it != main.end(); i++, it++)
     {
-        main.at(i).setIndex(1);
-        main.at(i).setLetter('B');
+        it->setIndex(1);
+        it->setLetter('B');
     }
     //give indexes to other elements left in the the main
     int index = 1;
-    for (size_t i = pairValue, pair = 0; i < main.size(); i++)
+    size_t pair = 0;
+    for (; it != main.end(); it++)
     {
-        main.at(i).setIndex(index);
-        main.at(i).setLetter('A');
+        it->setIndex(index);
+        it->setLetter('A');
         pair++;
         if (pair == pairValue)
         {
@@ -152,15 +172,16 @@ void giveIndexes(std::vector<PmergeMe>& main, const size_t& pairValue)
     }
 };
 
-void insertBackToMain(std::vector<PmergeMe>& main, std::vector<PmergeMe>& pend, const size_t& pairValue)
+void insertBackToMain(std::list<PmergeMe>& main, std::list<PmergeMe>& pend, const size_t& pairValue)
 {
     std::vector<int> jacobsthal = {1, 3, 5, 11, 21, 43, 85, 171, 341, 683, 1365, 2731, 5461};
 
     for (size_t jacobIndex = 1; pend.empty() == false; jacobIndex++)
     {
-        const_iterator elementCompPos = findNextPosition(pend, jacobsthal.at(jacobIndex), pairValue);
-        const_iterator elementMovePos = elementCompPos - (pairValue  - 1);
-        const_iterator lastPos = findLastPosition(pend, jacobsthal.at(jacobIndex - 1) + 1);
+        const_iterator_list elementCompPos = findNextPosition(pend, jacobsthal.at(jacobIndex), pairValue);
+        const_iterator_list elementMovePos = elementCompPos;
+        std::advance(elementMovePos, -(pairValue - 1));
+        const_iterator_list lastPos = findLastPosition(pend, jacobsthal.at(jacobIndex - 1) + 1);
         if (COMMENTS)
         {
             std::cout << "TARGET INDEX = " << elementCompPos->getIndex() << std::endl;
@@ -168,19 +189,19 @@ void insertBackToMain(std::vector<PmergeMe>& main, std::vector<PmergeMe>& pend, 
             std::cout << "LAST VALUE = " << lastPos->getValue() << std::endl;
             std::cout << "FIRST TO MOVE = " << elementMovePos->getValue() << std::endl;
         }
-        while (elementCompPos >= lastPos)
+        while (elementMovePos != pend.end() && std::distance(lastPos, elementMovePos) >= 0)
         {
-            const_iterator insertPos = findTargetPosition(main, *elementCompPos, pairValue);
+            const_iterator_list insertPos = findTargetPosition(main, *elementCompPos, pairValue);
             for (size_t i = 0; i < pairValue; i++)
             {
                 if (COMMENTS)
                     std::cout << "inserting " << elementMovePos->getValue() << " into index " << insertPos->getIndex() << std::endl;
                 main.insert(insertPos, *elementMovePos);
-                pend.erase(elementMovePos);
-                insertPos++;
+                elementMovePos = pend.erase(elementMovePos);
             }
             elementCompPos = findNextPosition(pend, jacobsthal.at(jacobIndex), pairValue);
-            elementMovePos = elementCompPos - (pairValue  - 1);
+            elementMovePos = elementCompPos;
+            std::advance(elementMovePos, -(pairValue - 1));
             if (COMMENTS)
             {
                 std::cout << "in the pend now: ";
@@ -192,17 +213,23 @@ void insertBackToMain(std::vector<PmergeMe>& main, std::vector<PmergeMe>& pend, 
     }
 };
 
-const_iterator findNextPosition(std::vector<PmergeMe>& pend, const int& jacobNumber, const size_t& pairValue)
+const_iterator_list findNextPosition(std::list<PmergeMe>& pend, const int& jacobNumber, const size_t& pairValue)
 {
     for (auto it = pend.begin(); it != pend.end(); it++)
     {
         if (it->getIndex() == jacobNumber)
-            return it + (pairValue - 1);
+        {
+            int move = pairValue - 1;
+            std::advance(it, move);
+            return it;
+        }
     }
-    return pend.end() - 1;
+    auto end = pend.end();
+    std::advance(end, -1);
+    return end;
 };
 
-const_iterator findLastPosition(std::vector<PmergeMe>& pend, const int& jacobNumber)
+const_iterator_list findLastPosition(std::list<PmergeMe>& pend, const int& jacobNumber)
 {
     for (auto it = pend.begin(); it != pend.end(); it++)
     {
@@ -212,16 +239,32 @@ const_iterator findLastPosition(std::vector<PmergeMe>& pend, const int& jacobNum
     return pend.begin();
 };
 
-const_iterator findTargetPosition(std::vector<PmergeMe>& main, const PmergeMe& element, const size_t& pairValue)
+const_iterator_list findTargetPosition(std::list<PmergeMe>& main, const PmergeMe& element, const size_t& pairValue)
 {
-    for (auto it = main.begin() + pairValue - 1; it != main.end(); it += pairValue)
+    auto it = main.begin();
+    std::advance(it, (pairValue - 1));
+    for (; it != main.end(); std::advance(it, pairValue))
     {
+        if (std::distance(it, main.end()) <= 0)
+            break ;
         if (COMMENTS)
             std::cout << "comparing " << element.getValue() << " with " << it->getValue() << std::endl;
-        if (element.getValue() < it->getValue())
-            return it - (pairValue - 1);
-        if (element.getIndex() <= it->getIndex() && it->getLetter() == 'A')
-            return it - (pairValue - 1);
+        if (!compare(element, *it))
+        {
+            if (COMMENTS)
+                std::cout << "smaller value found\n";
+            std::advance(it, -(pairValue - 1));
+            return it;
+        }
+        if (element.getIndex() == it->getIndex() && it->getLetter() == 'A')
+        { 
+            if (COMMENTS)
+                std::cout << "limit found\n";
+            std::advance(it, -(pairValue - 1));
+            return it;
+        }
     }
-    return main.begin();
+    auto end = main.end();
+    std::advance(end, -1);
+    return end;
 };

@@ -4,7 +4,8 @@ FLAGS	=	-Wall -Wextra -Werror -std=c++20 -ggdb3
 SRCS	=	sources/main.cpp \
 			sources/utils.cpp \
 			sources/PmergeMe.cpp \
-			sources/sort_vector.cpp
+			sources/sort_vector.cpp \
+			sources/sort_list.cpp
 HEADER  =	includes/PmergeMe.hpp \
 			includes/utils.hpp
 TEMPLATE =	sources/utils.tpp

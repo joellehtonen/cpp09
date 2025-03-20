@@ -1,25 +1,24 @@
 #include "../includes/utils.hpp"
 
-//TODO REMAKE TO USE ITERATORS
 template <typename T>
 void giveNewRanks(T& container, int pairValue)
 {
-    for (size_t i = 0; i < container.size(); i++)
+    int i = 0;
+    for (auto it = container.begin(); it != container.end(); ++it, ++i)
     {
-        container.at(i).setRank(i % pairValue + 1);
-		std::cout << std::left << "number: " << std::setw(8) << container.at(i).getValue() << " rank: " << std::setw(16) << container.at(i).getRank() << std::endl;
+        it->setRank(i % pairValue + 1);
+		std::cout << std::left << "number: " << std::setw(8) << it->getValue() << " rank: " << std::setw(16) << it->getRank() << std::endl;
     }
 };
 
-//TODO REMAKE TO USE ITERATORS
 template <typename T>
 void updateGroups(T& container, int pairValue)
 {
     int group = 0;
     int counter = 0;
-    for (size_t i = 0; i < container.size(); i++)
+    for (auto it = container.begin(); it != container.end(); ++it)
     {
-        container.at(i).addGroup(group);
+        it->addGroup(group);
         counter++;
         if (counter == pairValue)
         {
@@ -29,15 +28,14 @@ void updateGroups(T& container, int pairValue)
 	}
 };
 
-//TODO REMAKE TO USE ITERATORS
 template <typename T>
 void printGroups(const T& container)
 {
     std::cout << "GROUPS: \n";
-    for (size_t i = 0; i < container.size(); i++)
+    for (auto it = container.begin(); it != container.end(); ++it)
     {
-        std::cout << std::left << std::setw(16) << (std::to_string(container.at(i).getValue()) + " --> ");
-        std::vector<int> printThis = container.at(i).getGroup();
+        std::cout << std::left << std::setw(16) << (std::to_string(it->getValue()) + " --> ");
+        std::vector<int> printThis = it->getGroup();
         for (const int it : printThis)
             std::cout << std::setw(8) << it << " ";
         std::cout << std::endl;
@@ -74,13 +72,14 @@ bool checkResultOrder(const T& container)
 {
     for (auto it = container.begin(); it != container.end(); it++)
     {
-        auto itNext = it;
-        itNext++;
-        if (itNext == container.end())
+        auto next = it;
+        next++;
+        if (next == container.end())
             break ;
-        if (it->getValue() > itNext->getValue())
+        if (it->getValue() > next->getValue())
         {
             std::cout << "The container is NOT sorted\n";
+            std::cout << it->getValue() << "is bigger than " << next->getValue();
             return false;
         }
     }
