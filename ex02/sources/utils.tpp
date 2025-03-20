@@ -79,7 +79,7 @@ bool checkResultOrder(const T& container)
         if (it->getValue() > next->getValue())
         {
             std::cout << "The container is NOT sorted\n";
-            std::cout << it->getValue() << "is bigger than " << next->getValue();
+            std::cout << it->getValue() << " is bigger than " << next->getValue();
             return false;
         }
     }
