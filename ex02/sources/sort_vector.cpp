@@ -222,8 +222,7 @@ const_iterator_vector findTargetPosition(std::vector<PmergeMe>& main, const Pmer
         if (it >= main.end())
             break ;
         if (COMMENTS)
-            std::cout << "comparing " << element.getValue() << " with " << it->getValue() << std::endl;
-        //if (element.getValue() < it->getValue())
+            std::cout << "finding target, comparing " << element.getValue() << " with " << it->getValue() << std::endl;
         if (!compare(element, *it))
         {
             if (COMMENTS)
@@ -237,5 +236,7 @@ const_iterator_vector findTargetPosition(std::vector<PmergeMe>& main, const Pmer
             return it - (pairValue - 1);
         }
     }
-    return main.end() - 1;
+    if (COMMENTS)
+        std::cout << "end reached\n";
+    return main.end();
 };

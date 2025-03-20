@@ -248,7 +248,7 @@ const_iterator_list findTargetPosition(std::list<PmergeMe>& main, const PmergeMe
         if (std::distance(it, main.end()) <= 0)
             break ;
         if (COMMENTS)
-            std::cout << "comparing " << element.getValue() << " with " << it->getValue() << std::endl;
+            std::cout << "finding target, comparing " << element.getValue() << " with " << it->getValue() << std::endl;
         if (!compare(element, *it))
         {
             if (COMMENTS)
@@ -263,8 +263,17 @@ const_iterator_list findTargetPosition(std::list<PmergeMe>& main, const PmergeMe
             std::advance(it, -(pairValue - 1));
             return it;
         }
+        auto check = it;
+        for (size_t i = 0; i < pairValue; i++)
+        {
+            std::advance(check, 1);
+            if (check == main.end())
+                break ;
+        }
     }
+    if (COMMENTS)
+        std::cout << "end reached\n";
     auto end = main.end();
-    std::advance(end, -1);
+    //std::advance(end, -1);
     return end;
 };

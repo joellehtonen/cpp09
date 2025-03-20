@@ -17,39 +17,29 @@ int main (int ac, char** av)
     std::list<PmergeMe>     list;
     try { 
         checkInput(ac, av); 
-    }
-    catch (std::exception& e) {
-        std::cerr << "Error. " << e.what() << "\n";
-    }
-    for (int i = 1; i < ac; i++)
-    {
-        vctr.push_back(PmergeMe(av[i]));
-        list.push_back(PmergeMe(av[i]));
-    }
-    std::cout << "BEFORE: ";
-    printContainerContents(vctr);
+        for (int i = 1; i < ac; i++)
+        {
+            vctr.push_back(PmergeMe(av[i]));
+            list.push_back(PmergeMe(av[i]));
+        }
+        std::cout << "BEFORE: ";
+        printContainerContents(vctr);
 
-    std::cout << "SORTING VECTOR\n";
-    try {
+        std::cout << "SORTING VECTOR\n";
         sortVector(vctr);
-    }
-    catch (std::exception& e) {
-        std::cerr << "Error. " << e.what() << "\n";
-    }
-    //stop timer
-    //print timer
-    printContainerContents(vctr);
-    checkResultOrder(vctr);
+        printContainerContents(vctr);
+        checkResultOrder(vctr);
+        //stop timer
+        //print timer
 
-    std::cout << "SORTING LIST\n";
-    try {
-        sortList(list);
+        // std::cout << "SORTING LIST\n";
+        // sortList(list);
+        // printContainerContents(vctr);
+        // checkResultOrder(vctr);
+        //stop timer
+        //print timer
     }
     catch (std::exception& e) {
         std::cerr << "Error. " << e.what() << "\n";
     }
-    printContainerContents(vctr);
-    checkResultOrder(vctr);
-    //stop timer
-    //print timer
 }
