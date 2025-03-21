@@ -12,7 +12,8 @@ void sortVector(std::vector<PmergeMe>& container)
         printComparisonAmount();
     }
     insertion(container, pairValue);
-    printComparisonAmount();
+    if (COMMENTS)
+        printComparisonAmount();
 };
 
 void firstComparison(std::vector<PmergeMe>& container)
@@ -78,7 +79,7 @@ void insertion(std::vector<PmergeMe>& main, size_t& pairValue)
     for (; pairValue >= 1; pairValue /= 2)
     {
         if (COMMENTS)
-            std::cout << "PAIR VALUE = " << pairValue << std::endl;
+            std::cout << "------- PAIR VALUE = " << pairValue << " -------" << std::endl;
         size_t comparisonIndex = pairValue * 3 - 1;
         if (comparisonIndex > main.size())
             continue ;
@@ -88,7 +89,7 @@ void insertion(std::vector<PmergeMe>& main, size_t& pairValue)
             if (comparisonIndex + pairValue >= main.size())
             {
                 if (COMMENTS)
-                    std::cout << "moving " << main.at(comparisonIndex).getValue() << " to pend\n";
+                    std::cout << "no valid comps available, moving " << main.at(comparisonIndex).getValue() << " to pend\n";
                 moveToPend(main, pend, pairValue, comparisonIndex - pairValue + 1, pendIndex);
             }
             else
@@ -238,7 +239,7 @@ const_iterator_vector findTargetPosition(std::vector<PmergeMe>& main, const Pmer
                 std::cout << "bigger value found\n";
             return it - (pairValue - 1);
         }
-        if (element.getIndex() == it->getIndex() && it->getLetter() == 'A')
+        if (element.getIndex() == it->getIndex() - 1 && it->getLetter() == 'A')
         { 
             if (COMMENTS)
                 std::cout << "limit found\n";

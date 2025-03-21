@@ -12,7 +12,8 @@ void sortList(std::list<PmergeMe>& container)
         printComparisonAmount();
     }
     insertion(container, pairValue);
-    printComparisonAmount();
+    if (COMMENTS)
+        printComparisonAmount();
 };
 
 void firstComparison(std::list<PmergeMe>& container)
@@ -89,21 +90,21 @@ void insertion(std::list<PmergeMe>& main, size_t& pairValue)
     for (; pairValue >= 1; pairValue /= 2)
     {
         if (COMMENTS)
-            std::cout << "PAIR VALUE = " << pairValue << std::endl;
+            std::cout << "------- PAIR VALUE = " << pairValue << " -------" << std::endl;
         size_t comparisonIndex = pairValue * 3 - 1;
         if (comparisonIndex > main.size())
             continue ;
         size_t pendIndex = 2;
-        auto it = main.begin();
-        std::advance(it, comparisonIndex);
-        auto it2 = it;
-        std::advance(it2, pairValue);
         while (comparisonIndex < main.size())
         {
+            auto it = main.begin();
+            std::advance(it, comparisonIndex);
+            auto it2 = it;
+            std::advance(it2, pairValue);
             if (comparisonIndex + pairValue >= main.size())
             {
                 if (COMMENTS)
-                    std::cout << "moving " << it->getValue() << " to pend\n";
+                    std::cout << "no valid comps available, moving " << it->getValue() << " to pend\n";
                 moveToPend(main, pend, pairValue, comparisonIndex - pairValue + 1, pendIndex);
             }
             else
@@ -187,6 +188,7 @@ void insertBackToMain(std::list<PmergeMe>& main, std::list<PmergeMe>& pend, cons
         const_iterator_list elementMovePos = elementCompPos;
         std::advance(elementMovePos, -(pairValue - 1));
         const_iterator_list lastPos = findLastPosition(pend, jacobsthal.at(jacobIndex - 1) + 1);
+        int lastValue = lastPos->getValue();
         if (COMMENTS)
         {
             std::cout << "TARGET INDEX = " << elementCompPos->getLetter() << elementCompPos->getIndex() << std::endl;
@@ -194,9 +196,11 @@ void insertBackToMain(std::list<PmergeMe>& main, std::list<PmergeMe>& pend, cons
             std::cout << "FIRST TO MOVE = " << elementMovePos->getValue() << std::endl;
             std::cout << "LAST VALUE = " << lastPos->getValue() << std::endl;
         }
-        while (elementMovePos != pend.end() && std::distance(lastPos, elementMovePos) >= 0)
+        int comparisonValue = elementCompPos->getValue();
+        while (pend.empty() == false && comparisonValue != lastValue)
         {
             const_iterator_list insertPos = findTargetPosition(main, *elementCompPos, pairValue);
+            comparisonValue = elementMovePos->getValue();
             for (size_t i = 0; i < pairValue; i++)
             {
                 if (COMMENTS)
@@ -204,20 +208,17 @@ void insertBackToMain(std::list<PmergeMe>& main, std::list<PmergeMe>& pend, cons
                 main.insert(insertPos, *elementMovePos);
                 elementMovePos = pend.erase(elementMovePos);
             }
-            std::cout << "moving on...\n";
-            std::cout << "compPos point to " << elementCompPos->getValue() << std::endl;
-            std::cout << "movePos point to " << elementMovePos->getValue() << std::endl;
-            // if (pend.empty() == false)
-            // {
-            //     std::advance(elementCompPos, -pairValue);
-            //     elementMovePos = elementCompPos;
-            //     std::advance(elementMovePos, -(pairValue - 1));
-            // }
+            if (pend.empty() == false)
+            {
+                std::advance(elementMovePos, -1);
+                elementCompPos = elementMovePos;
+                std::advance(elementMovePos, -(pairValue - 1));
+            }
             if (COMMENTS)
             {
-                std::cout << "in the pend now:     ";
+                std::cout << "in the pend now: ";
                 printContainerContents(pend);
-                std::cout << "in the main now:     ";
+                std::cout << "in the main now: ";
                 printContainerContents(main);
                 std::cout << "indexes in the pend: ";
                 printIndexes(pend);
@@ -258,7 +259,7 @@ const_iterator_list findTargetPosition(std::list<PmergeMe>& main, const PmergeMe
 {
     auto it = main.begin();
     std::advance(it, (pairValue - 1));
-    for (; it != main.end(); std::advance(it, pairValue))
+    while (it != main.end())
     {
         if (std::distance(it, main.end()) <= 0)
             break ;
@@ -271,22 +272,25 @@ const_iterator_list findTargetPosition(std::list<PmergeMe>& main, const PmergeMe
             std::advance(it, -(pairValue - 1));
             return it;
         }
-        if (element.getIndex() == it->getIndex() && it->getLetter() == 'A')
+        if (element.getIndex() == it->getIndex() - 1 && it->getLetter() == 'A')
         { 
             if (COMMENTS)
                 std::cout << "limit found\n";
             std::advance(it, -(pairValue - 1));
             return it;
         }
-        auto check = it;
+        auto checkpoint = it;
         for (size_t i = 0; i < pairValue; i++)
         {
-            std::advance(check, 1);
-            if (check == main.end())
-                break ;
+            std::advance(it, 1);
+            if (it == main.end())
+            {
+                if (COMMENTS)
+                    std::cout << "end reached\n";
+                std::advance(checkpoint, 1);
+                return checkpoint ;
+            }
         }
     }
-    if (COMMENTS)
-        std::cout << "end reached\n";
-    return it;
+    return main.end();
 };
