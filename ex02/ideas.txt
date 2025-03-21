@@ -10,8 +10,10 @@ use class as a struct
 
 11 2 17 0 16 8 6 15 10 3 21 1 18 9 14 19 12 5 4 20 13 7
 
+REMEMBER TO VALGRIND
 
-DOESNT SORT
-5 9 16 26 15 19 13 11 2 24 12 18 29 8 21 14 22 25 23 6 7 10 30 27 28 17 1 3 4 20 
+
+DOESNT SOR
+
 
 allow both 1 2 3 and "1 2 3" as inputs

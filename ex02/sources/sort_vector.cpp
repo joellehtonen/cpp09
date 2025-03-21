@@ -166,10 +166,11 @@ void insertBackToMain(std::vector<PmergeMe>& main, std::vector<PmergeMe>& pend, 
         const_iterator_vector lastPos = findLastPosition(pend, jacobsthal.at(jacobIndex - 1) + 1);
         if (COMMENTS)
         {
-            std::cout << "TARGET INDEX = " << elementCompPos->getIndex() << std::endl;
-            std::cout << "TARGET VALUE = " << elementCompPos->getValue() << std::endl;
-            std::cout << "LAST VALUE = " << lastPos->getValue() << std::endl;
+            std::cout << "TARGET INDEX = " << elementCompPos->getLetter() << elementCompPos->getIndex() << std::endl;
+            std::cout << "COMP VALUE = " << elementCompPos->getValue() << std::endl;
             std::cout << "FIRST TO MOVE = " << elementMovePos->getValue() << std::endl;
+            std::cout << "LAST VALUE = " << lastPos->getValue() << std::endl;
+            printIndexes(main, pend);
         }
         while (elementCompPos >= lastPos)
         {
@@ -181,9 +182,10 @@ void insertBackToMain(std::vector<PmergeMe>& main, std::vector<PmergeMe>& pend, 
                 main.insert(insertPos, *elementMovePos);
                 pend.erase(elementMovePos);
                 insertPos++;
+                elementCompPos--;
             }
-            elementCompPos = findNextPosition(pend, jacobsthal.at(jacobIndex), pairValue);
-            elementMovePos = elementCompPos - (pairValue  - 1);
+            if (pend.empty() == false)
+                elementMovePos = elementCompPos - (pairValue  - 1);
             if (COMMENTS)
             {
                 std::cout << "in the pend now: ";
@@ -217,16 +219,17 @@ const_iterator_vector findLastPosition(std::vector<PmergeMe>& pend, const int& j
 
 const_iterator_vector findTargetPosition(std::vector<PmergeMe>& main, const PmergeMe& element, const size_t& pairValue)
 {
-    for (auto it = main.begin() + pairValue - 1; it < main.end(); it += pairValue)
+    auto it = main.begin() + pairValue - 1;
+    for (; it < main.end(); it += pairValue)
     {
         if (it >= main.end())
             break ;
         if (COMMENTS)
-            std::cout << "finding target, comparing " << element.getValue() << " with " << it->getValue() << std::endl;
+            std::cout << "finding target... comparing " << element.getValue() << " with " << it->getValue() << std::endl;
         if (!compare(element, *it))
         {
             if (COMMENTS)
-                std::cout << "smaller value found\n";
+                std::cout << "bigger value found\n";
             return it - (pairValue - 1);
         }
         if (element.getIndex() == it->getIndex() && it->getLetter() == 'A')
@@ -238,5 +241,5 @@ const_iterator_vector findTargetPosition(std::vector<PmergeMe>& main, const Pmer
     }
     if (COMMENTS)
         std::cout << "end reached\n";
-    return main.end();
+    return it - (pairValue - 1);
 };

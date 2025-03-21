@@ -184,10 +184,10 @@ void insertBackToMain(std::list<PmergeMe>& main, std::list<PmergeMe>& pend, cons
         const_iterator_list lastPos = findLastPosition(pend, jacobsthal.at(jacobIndex - 1) + 1);
         if (COMMENTS)
         {
-            std::cout << "TARGET INDEX = " << elementCompPos->getIndex() << std::endl;
-            std::cout << "TARGET VALUE = " << elementCompPos->getValue() << std::endl;
-            std::cout << "LAST VALUE = " << lastPos->getValue() << std::endl;
+            std::cout << "TARGET INDEX = " << elementCompPos->getLetter() << elementCompPos->getIndex() << std::endl;
+            std::cout << "COMP VALUE = " << elementCompPos->getValue() << std::endl;
             std::cout << "FIRST TO MOVE = " << elementMovePos->getValue() << std::endl;
+            std::cout << "LAST VALUE = " << lastPos->getValue() << std::endl;
         }
         while (elementMovePos != pend.end() && std::distance(lastPos, elementMovePos) >= 0)
         {
@@ -248,11 +248,11 @@ const_iterator_list findTargetPosition(std::list<PmergeMe>& main, const PmergeMe
         if (std::distance(it, main.end()) <= 0)
             break ;
         if (COMMENTS)
-            std::cout << "finding target, comparing " << element.getValue() << " with " << it->getValue() << std::endl;
+            std::cout << "finding target... comparing " << element.getValue() << " with " << it->getValue() << std::endl;
         if (!compare(element, *it))
         {
             if (COMMENTS)
-                std::cout << "smaller value found\n";
+                std::cout << "bigger value found\n";
             std::advance(it, -(pairValue - 1));
             return it;
         }

@@ -4,7 +4,7 @@
 #include <list>
 #include <iomanip>
 #include <algorithm>
-#define COMMENTS 1
+#define COMMENTS 0
 
 typedef std::vector<PmergeMe>::const_iterator const_iterator_vector;
 typedef std::list<PmergeMe>::const_iterator const_iterator_list;
