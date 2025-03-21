@@ -105,7 +105,12 @@ void insertion(std::vector<PmergeMe>& main, size_t& pairValue)
         }
         giveIndexes(main, pairValue);
         if (COMMENTS)
-            printIndexes(main, pend);
+        {
+            std::cout << "indexes in the pend: ";
+            printIndexes(pend);
+            std::cout << "indexes in the main: ";
+            printIndexes(main);
+        }
         insertBackToMain(main, pend, pairValue);
         if (COMMENTS)
             printContainerContents(main);
@@ -170,20 +175,17 @@ void insertBackToMain(std::vector<PmergeMe>& main, std::vector<PmergeMe>& pend, 
             std::cout << "COMP VALUE = " << elementCompPos->getValue() << std::endl;
             std::cout << "FIRST TO MOVE = " << elementMovePos->getValue() << std::endl;
             std::cout << "LAST VALUE = " << lastPos->getValue() << std::endl;
-            printIndexes(main, pend);
         }
         while (elementCompPos >= lastPos)
         {
             const_iterator_vector insertPos = findTargetPosition(main, *elementCompPos, pairValue);
-            for (size_t i = 0; i < pairValue; i++)
-            {
-                if (COMMENTS)
-                    std::cout << "inserting " << elementMovePos->getValue() << " into index " << insertPos->getIndex() << std::endl;
-                main.insert(insertPos, *elementMovePos);
-                pend.erase(elementMovePos);
-                insertPos++;
-                elementCompPos--;
-            }
+            const_iterator_vector lastElem = elementMovePos + pairValue;
+            if (COMMENTS)
+                std::cout << "inserting values starting from " << elementMovePos->getValue() << " into index " << insertPos->getIndex() << std::endl;
+            main.insert(insertPos, elementMovePos, lastElem);
+            elementMovePos = pend.erase(elementMovePos, lastElem);
+            // move to next element
+            elementCompPos -= pairValue;
             if (pend.empty() == false)
                 elementMovePos = elementCompPos - (pairValue  - 1);
             if (COMMENTS)
@@ -192,6 +194,10 @@ void insertBackToMain(std::vector<PmergeMe>& main, std::vector<PmergeMe>& pend, 
                 printContainerContents(pend);
                 std::cout << "in the main now: ";
                 printContainerContents(main);
+                std::cout << "indexes in the pend: ";
+                printIndexes(pend);
+                std::cout << "indexes in the main: ";
+                printIndexes(main);
             }
         }
     }

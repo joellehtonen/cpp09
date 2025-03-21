@@ -120,7 +120,12 @@ void insertion(std::list<PmergeMe>& main, size_t& pairValue)
         }
         giveIndexes(main, pairValue);
         if (COMMENTS)
-            printIndexes(main, pend);
+        {
+            std::cout << "indexes in the pend: ";
+            printIndexes(pend);
+            std::cout << "indexes in the main: ";
+            printIndexes(main);
+        }
         insertBackToMain(main, pend, pairValue);
         if (COMMENTS)
             printContainerContents(main);
@@ -199,15 +204,25 @@ void insertBackToMain(std::list<PmergeMe>& main, std::list<PmergeMe>& pend, cons
                 main.insert(insertPos, *elementMovePos);
                 elementMovePos = pend.erase(elementMovePos);
             }
-            elementCompPos = findNextPosition(pend, jacobsthal.at(jacobIndex), pairValue);
-            elementMovePos = elementCompPos;
-            std::advance(elementMovePos, -(pairValue - 1));
+            std::cout << "moving on...\n";
+            std::cout << "compPos point to " << elementCompPos->getValue() << std::endl;
+            std::cout << "movePos point to " << elementMovePos->getValue() << std::endl;
+            // if (pend.empty() == false)
+            // {
+            //     std::advance(elementCompPos, -pairValue);
+            //     elementMovePos = elementCompPos;
+            //     std::advance(elementMovePos, -(pairValue - 1));
+            // }
             if (COMMENTS)
             {
-                std::cout << "in the pend now: ";
+                std::cout << "in the pend now:     ";
                 printContainerContents(pend);
-                std::cout << "in the main now: ";
+                std::cout << "in the main now:     ";
                 printContainerContents(main);
+                std::cout << "indexes in the pend: ";
+                printIndexes(pend);
+                std::cout << "indexes in the main: ";
+                printIndexes(main);
             }
         }
     }
@@ -273,7 +288,5 @@ const_iterator_list findTargetPosition(std::list<PmergeMe>& main, const PmergeMe
     }
     if (COMMENTS)
         std::cout << "end reached\n";
-    auto end = main.end();
-    //std::advance(end, -1);
-    return end;
+    return it;
 };

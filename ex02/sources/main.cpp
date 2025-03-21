@@ -25,17 +25,19 @@ int main (int ac, char** av)
         std::cout << "BEFORE: ";
         printContainerContents(vctr);
 
-        std::cout << "SORTING VECTOR\n";
-        sortVector(vctr);
-        printContainerContents(vctr);
-        checkResultOrder(vctr);
+        // std::cout << "SORTING VECTOR\n";
+        //start timer
+        // sortVector(vctr);
+        // printContainerContents(vctr);
+        // checkResultOrder(vctr);
         //stop timer
         //print timer
 
-        // std::cout << "SORTING LIST\n";
-        // sortList(list);
-        // printContainerContents(vctr);
-        // checkResultOrder(vctr);
+        std::cout << "SORTING LIST\n";
+        //start timer
+        sortList(list);
+        printContainerContents(list);
+        checkResultOrder(list);
         //stop timer
         //print timer
     }

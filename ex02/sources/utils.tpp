@@ -43,16 +43,9 @@ void printGroups(const T& container)
 };
 
 template <typename T>
-void printIndexes(const T& main, const T& pend)
+void printIndexes(const T& container)
 {
-    std::cout << "indexes in the pend: ";
-    for (auto it = pend.begin(); it != pend.end(); it++)
-    {
-        std::cout << it->getLetter() << it->getIndex() << " ";
-    }
-    std::cout << std::endl;
-    std::cout << "indexes in the main: ";
-    for (auto it = main.begin(); it != main.end(); it++)
+    for (auto it = container.begin(); it != container.end(); it++)
     {
         std::cout << it->getLetter() << it->getIndex() << " ";
     }
