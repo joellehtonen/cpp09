@@ -2,6 +2,7 @@
 #include "../includes/utils.hpp"
 
 // ./PmergeMe `shuf -i 1-100000 -n 3000 | tr "\n" " "`
+// 11 2 17 0 16 8 6 15 10 3 21 1 18 9 14 19 12 5 4 20 13 7
 
 void checkInput(int ac, char** av)
 {
@@ -28,13 +29,13 @@ int main (int ac, char** av)
         }
         std::cout << "BEFORE: ";
         printContainerContents(vector);
-        std::cout << "sorting vector...\n";
+        //std::cout << "sorting vector...\n";
         auto startVector = std::chrono::steady_clock::now();
         sortVector(vector);
         auto stopVector = std::chrono::steady_clock::now();
         //checkResultOrder(vctr);
 
-        std::cout << "sorting list...\n";
+        //std::cout << "sorting list...\n";
         auto startList = std::chrono::steady_clock::now();
         sortList(list);
         auto stopList = std::chrono::steady_clock::now();
@@ -43,10 +44,10 @@ int main (int ac, char** av)
         std::cout << "AFTER: ";
         printContainerContents(vector);
 
-        std::chrono::duration<double> durationVector = std::chrono::duration_cast<std::chrono::milliseconds>(stopVector - startVector);
-        std::chrono::duration<double> durationList = std::chrono::duration_cast<std::chrono::milliseconds>(stopList - startList);
-        std::cout << "Time to sort " << vector.size() << " elements with vector: " << durationVector.count() << " seconds" << std::endl;
-        std::cout << "Time to sort " << list.size() << " elements with list: " << durationList.count() << " seconds" << std::endl;
+        auto durationVector = std::chrono::duration<double, std::milli>(stopVector - startVector);
+        auto durationList = std::chrono::duration<double, std::milli>(stopList - startList);
+        std::cout << "Time to sort " << vector.size() << " elements with vector: " << durationVector.count() << " milliseconds" << std::endl;
+        std::cout << "Time to sort " << list.size() << " elements with list: " << durationList.count() << " milliseconds" << std::endl;
     }
     catch (std::exception& e) {
         std::cerr << "Error. " << e.what() << "\n";

@@ -301,4 +301,3 @@ const_iterator_list findTargetPosition(std::list<PmergeMe>& main, const PmergeMe
     }
     return main.end();
 };
-

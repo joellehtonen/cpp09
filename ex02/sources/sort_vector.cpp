@@ -182,7 +182,6 @@ void insertBackToMain(std::vector<PmergeMe>& main, std::vector<PmergeMe>& pend, 
                 std::cout << "inserting values starting from " << elementMovePos->getValue() << std::endl;
             main.insert(insertPos, elementMovePos, lastElem);
             elementMovePos = pend.erase(elementMovePos, lastElem);
-            // move to next element
             elementCompPos -= pairValue;
             if (pend.empty() == false)
                 elementMovePos = elementCompPos - (pairValue  - 1);

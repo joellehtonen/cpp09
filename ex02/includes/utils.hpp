@@ -53,7 +53,7 @@ template <typename T>
 void printGroups(const T& container);
 
 template <typename T>
-void printIndexes(const T& main, const T& pend);
+void printIndexes(const T& container);
 
 template <typename T>
 void printContainerContents(const T& container);
