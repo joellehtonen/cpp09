@@ -1,7 +1,6 @@
 #include "../includes/PmergeMe.hpp"
 #include "../includes/utils.hpp"
 
-// comparing/swapping each number (1), then pair (2), and then pair of pairs (4), etc, 8, 16, 32... 
 void sortList(std::list<PmergeMe>& container)
 {
     firstComparison(container);
@@ -155,14 +154,12 @@ void moveToPend(std::list<PmergeMe>& main, std::list<PmergeMe>& pend, const size
 
 void giveIndexes(std::list<PmergeMe>& main, const size_t& pairValue)
 {
-    //special case for the first element in the main
     auto it = main.begin();
     for (size_t i = 0; i < pairValue && it != main.end(); i++, it++)
     {
         it->setIndex(1);
         it->setLetter('B');
     }
-    //give indexes to other elements left in the the main
     int index = 1;
     size_t pair = 0;
     for (; it != main.end(); it++)
@@ -204,7 +201,7 @@ void insertBackToMain(std::list<PmergeMe>& main, std::list<PmergeMe>& pend, cons
             comparison = elementMovePos->getValue();
             const_iterator_list insertPos = findTargetPosition(main, *elementCompPos, pairValue);
             if (COMMENTS)
-                std::cout << "inserting " << elementMovePos->getValue() << " into index " << insertPos->getIndex() << std::endl;
+                std::cout << "inserting values starting from " << elementMovePos->getValue() << std::endl;
             const_iterator_list lastElem = elementMovePos;
             std::advance(lastElem, pairValue);
             main.insert(insertPos, elementMovePos, lastElem);
@@ -233,6 +230,8 @@ void insertBackToMain(std::list<PmergeMe>& main, std::list<PmergeMe>& pend, cons
 void handleRemainingElement(std::list<PmergeMe>& main, std::list<PmergeMe>& pend, const_iterator_list insertThis)
 {
     const_iterator_list insertHere = findTargetPosition(main, *insertThis, 1);
+    if (COMMENTS)
+        std::cout << "inserting value " << insertThis->getValue() << std::endl;
     main.insert(insertHere, *insertThis);
     pend.erase(pend.begin());
 }

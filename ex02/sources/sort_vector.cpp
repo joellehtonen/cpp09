@@ -1,7 +1,6 @@
 #include "../includes/PmergeMe.hpp"
 #include "../includes/utils.hpp"
 
-// comparing/swapping each number (1), then pair (2), and then pair of pairs (4), etc, 8, 16, 32... 
 void sortVector(std::vector<PmergeMe>& container)
 {
     firstComparison(container);
@@ -36,7 +35,7 @@ void firstComparison(std::vector<PmergeMe>& container)
 size_t formPairs(std::vector<PmergeMe>& container)
 {
     if (COMMENTS)
-        printContainerContents(container); //TEST
+        printContainerContents(container);
     size_t pairValue = 2;
     size_t maxSize = container.size() / 2;
     for (; pairValue <= maxSize; pairValue *= 2)
@@ -51,7 +50,7 @@ size_t formPairs(std::vector<PmergeMe>& container)
         }
         updateGroups(container, pairValue);
         if (COMMENTS)
-            printContainerContents(container); //TEST
+            printContainerContents(container);
     }
     return pairValue / 2;
 };
@@ -140,13 +139,11 @@ void moveToPend(std::vector<PmergeMe>& main, std::vector<PmergeMe>& pend, const 
 
 void giveIndexes(std::vector<PmergeMe>& main, const size_t& pairValue)
 {
-    //special case for the first element in the main
     for (size_t i = 0; i < pairValue; i++)
     {
         main.at(i).setIndex(1);
         main.at(i).setLetter('B');
     }
-    //give indexes to other elements left in the the main
     int index = 1;
     for (size_t i = pairValue, pair = 0; i < main.size(); i++)
     {
@@ -182,7 +179,7 @@ void insertBackToMain(std::vector<PmergeMe>& main, std::vector<PmergeMe>& pend, 
             const_iterator_vector insertPos = findTargetPosition(main, *elementCompPos, pairValue);
             const_iterator_vector lastElem = elementMovePos + pairValue;
             if (COMMENTS)
-                std::cout << "inserting values starting from " << elementMovePos->getValue() << " into index " << insertPos->getIndex() << std::endl;
+                std::cout << "inserting values starting from " << elementMovePos->getValue() << std::endl;
             main.insert(insertPos, elementMovePos, lastElem);
             elementMovePos = pend.erase(elementMovePos, lastElem);
             // move to next element
