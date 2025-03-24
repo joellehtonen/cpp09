@@ -36,20 +36,20 @@ int main (int ac, char** av)
         checkResultOrder(vector);
         std::cout << "\n\n\n";
 
-        std::cout << "sorting list...\n";
-        auto startList = std::chrono::steady_clock::now();
-        resetComparisons();
-        sortList(list);
-        auto stopList = std::chrono::steady_clock::now();
-        checkResultOrder(list);
+        // std::cout << "sorting list...\n";
+        // auto startList = std::chrono::steady_clock::now();
+        // resetComparisons();
+        // sortList(list);
+        // auto stopList = std::chrono::steady_clock::now();
+        // checkResultOrder(list);
 
         std::cout << "AFTER: ";
         printContainerContents(vector);
 
         auto durationVector = std::chrono::duration<double, std::milli>(stopVector - startVector);
-        auto durationList = std::chrono::duration<double, std::milli>(stopList - startList);
+        //auto durationList = std::chrono::duration<double, std::milli>(stopList - startList);
         std::cout << "Time to sort " << vector.size() << " elements with vector: " << durationVector.count() << " milliseconds" << std::endl;
-        std::cout << "Time to sort " << list.size() << " elements with list: " << durationList.count() << " milliseconds" << std::endl;
+        //std::cout << "Time to sort " << list.size() << " elements with list: " << durationList.count() << " milliseconds" << std::endl;
     }
     catch (std::exception& e) {
         std::cerr << "Error. " << e.what() << "\n";

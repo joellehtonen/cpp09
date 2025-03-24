@@ -255,22 +255,24 @@ const_iterator_vector findTargetPosition(std::vector<PmergeMe>& main, const Pmer
 {
     const_iterator_vector limit = findLimit(main, element, pairValue);
     const_iterator_vector it  = main.begin();
-    while (static_cast<size_t>(std::distance(it, limit)) > pairValue)
+    while (it < limit)
     {
-        const_iterator_vector middle = std::next(it, std::distance(it, limit) / 2 / pairValue * pairValue);
+        size_t step = std::distance(it, limit) / 2;
+        step = (step / pairValue) * pairValue;
+        const_iterator_vector middle = std::next(it, step);
         std::cout << "finding target... comparing " << element.getValue() << " with " << middle->getValue() << std::endl;
-        auto compLeft = middle - pairValue;
-        auto compRight = middle + pairValue;
         if (compare(element, *middle))
-            it = middle;
-        else 
+        {
+            if (middle + pairValue < limit)
+                it = middle + pairValue;
+            else
+                it = limit;
+        }
+        else
             limit = middle;
-        
-        
     }
     return it;
 };
-
 
 const_iterator_vector findLimit(std::vector<PmergeMe>& main, const PmergeMe& element, const size_t& pairValue)
 {
