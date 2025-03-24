@@ -222,31 +222,71 @@ const_iterator_vector findLastPosition(std::vector<PmergeMe>& pend, const int& j
     return pend.begin();
 };
 
+// const_iterator_vector findTargetPosition(std::vector<PmergeMe>& main, const PmergeMe& element, const size_t& pairValue)
+// {
+//     auto it = main.begin() + pairValue - 1;
+//     while (it < main.end())
+//     {
+//         //std::cout << "element index " << element.getLetter() << element.getIndex() << " compared to " << it->getLetter() << it->getIndex() << std::endl;
+//         if (COMMENTS)
+//             std::cout << "finding target... comparing " << element.getValue() << " with " << it->getValue() << std::endl;
+//         if (it->getLetter() == 'A' && element.getIndex() == it->getIndex())
+//         { 
+//             if (COMMENTS)
+//                 std::cout << "limit found\n";
+//             return it - (pairValue - 1);
+//         }
+//         if (!compare(element, *it))
+//         {
+//             if (COMMENTS)
+//                 std::cout << "bigger value found\n";
+//             return it - (pairValue - 1);
+//         }
+//         if (it + pairValue >= main.end())
+//             break;
+//         it += pairValue;
+//     }
+//     if (COMMENTS)
+//         std::cout << "end reached\n";
+//     return it - (pairValue - 1);
+// };
+
 const_iterator_vector findTargetPosition(std::vector<PmergeMe>& main, const PmergeMe& element, const size_t& pairValue)
 {
+    const_iterator_vector limit = findLimit(main, element, pairValue);
+    const_iterator_vector it  = main.begin();
+    while (static_cast<size_t>(std::distance(it, limit)) > pairValue)
+    {
+        const_iterator_vector middle = std::next(it, std::distance(it, limit) / 2 / pairValue * pairValue);
+        std::cout << "finding target... comparing " << element.getValue() << " with " << middle->getValue() << std::endl;
+        auto compLeft = middle - pairValue;
+        auto compRight = middle + pairValue;
+        if (compare(element, *middle))
+            it = middle;
+        else 
+            limit = middle;
+        
+        
+    }
+    return it;
+};
+
+
+const_iterator_vector findLimit(std::vector<PmergeMe>& main, const PmergeMe& element, const size_t& pairValue)
+{
+    std::cout << "finding limit for " << element.getValue() << std::endl;
     auto it = main.begin() + pairValue - 1;
     while (it < main.end())
     {
-        //std::cout << "element index " << element.getLetter() << element.getIndex() << " compared to " << it->getLetter() << it->getIndex() << std::endl;
-        if (COMMENTS)
-            std::cout << "finding target... comparing " << element.getValue() << " with " << it->getValue() << std::endl;
         if (it->getLetter() == 'A' && element.getIndex() == it->getIndex())
         { 
             if (COMMENTS)
-                std::cout << "limit found\n";
+                std::cout << "limit found. it's value is " << it->getValue() << std::endl;
             return it - (pairValue - 1);
         }
-        if (!compare(element, *it))
-        {
-            if (COMMENTS)
-                std::cout << "bigger value found\n";
-            return it - (pairValue - 1);
-        }
-        if (it + pairValue >= main.end())
-            break;
         it += pairValue;
     }
     if (COMMENTS)
         std::cout << "end reached\n";
-    return it - (pairValue - 1);
+    return main.end();
 };

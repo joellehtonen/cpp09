@@ -19,9 +19,10 @@ void	insertion(std::vector<PmergeMe>& main, size_t& pairValue);
 void    moveToPend(std::vector<PmergeMe>& main, std::vector<PmergeMe>& pend, const size_t& pairValue, const size_t& moveIndex, const size_t& pendIndex);
 void    giveIndexes(std::vector<PmergeMe>& main, const size_t& pairValue);
 void    insertBackToMain(std::vector<PmergeMe>& main, std::vector<PmergeMe>& pend, const size_t& pairValue);
-const_iterator_vector    findNextPosition(std::vector<PmergeMe>& pend, const int& jacobNumber, const size_t& pairValue);
-const_iterator_vector    findLastPosition(std::vector<PmergeMe>& pend, const int& jacobNumber);
-const_iterator_vector    findTargetPosition(std::vector<PmergeMe>& main, const PmergeMe& element, const size_t& pairValue);
+const_iterator_vector	findNextPosition(std::vector<PmergeMe>& pend, const int& jacobNumber, const size_t& pairValue);
+const_iterator_vector	findLastPosition(std::vector<PmergeMe>& pend, const int& jacobNumber);
+const_iterator_vector	findTargetPosition(std::vector<PmergeMe>& main, const PmergeMe& element, const size_t& pairValue);
+const_iterator_vector	findLimit(std::vector<PmergeMe>& main, const PmergeMe& element, const size_t& pairValue);
 
 // LIST FUNCTIONS
 void 	sortList(std::list<PmergeMe>& container);
