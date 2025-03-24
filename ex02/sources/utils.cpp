@@ -32,10 +32,10 @@ bool checkOrder(int ac, char** av)
 {
 	for (int i = 2; i < ac; i++)
 	{
-		if (av[i - 1] > av[i])
-			return false;
+		if (std::stoi(av[i - 1]) > std::stoi(av[i]))
+			return true;
 	}
-	return true;
+	return false;
 }
 
 bool compare(const PmergeMe& ref1, const PmergeMe& ref2)

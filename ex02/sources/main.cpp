@@ -3,6 +3,8 @@
 
 void checkInput(int ac, char** av)
 {
+    if (ac < 2)
+        throw std::runtime_error("Not enough arguments");
     if (checkDigits(ac, av) == false)
         throw std::runtime_error("Only digits accepted");
     if (checkDuplicates(ac, av) == false)

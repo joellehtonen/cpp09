@@ -196,18 +196,19 @@ void insertBackToMain(std::list<PmergeMe>& main, std::list<PmergeMe>& pend, cons
             std::cout << "FIRST TO MOVE = " << elementMovePos->getValue() << std::endl;
             std::cout << "LAST VALUE = " << lastPos->getValue() << std::endl;
         }
-        int comparisonValue = elementCompPos->getValue();
-        while (pend.empty() == false && comparisonValue != lastValue)
+        int comparison = elementCompPos->getValue();
+        if (pairValue == 1 && pend.size() == 1)
+            handleRemainingElement(main, pend, elementMovePos);
+        while (pend.empty() == false && comparison != lastValue)
         {
+            comparison = elementMovePos->getValue();
             const_iterator_list insertPos = findTargetPosition(main, *elementCompPos, pairValue);
-            comparisonValue = elementMovePos->getValue();
-            for (size_t i = 0; i < pairValue; i++)
-            {
-                if (COMMENTS)
-                    std::cout << "inserting " << elementMovePos->getValue() << " into index " << insertPos->getIndex() << std::endl;
-                main.insert(insertPos, *elementMovePos);
-                elementMovePos = pend.erase(elementMovePos);
-            }
+            if (COMMENTS)
+                std::cout << "inserting " << elementMovePos->getValue() << " into index " << insertPos->getIndex() << std::endl;
+            const_iterator_list lastElem = elementMovePos;
+            std::advance(lastElem, pairValue);
+            main.insert(insertPos, elementMovePos, lastElem);
+            elementMovePos = pend.erase(elementMovePos, lastElem);
             if (pend.empty() == false)
             {
                 std::advance(elementMovePos, -1);
@@ -228,6 +229,13 @@ void insertBackToMain(std::list<PmergeMe>& main, std::list<PmergeMe>& pend, cons
         }
     }
 };
+
+void handleRemainingElement(std::list<PmergeMe>& main, std::list<PmergeMe>& pend, const_iterator_list insertThis)
+{
+    const_iterator_list insertHere = findTargetPosition(main, *insertThis, 1);
+    main.insert(insertHere, *insertThis);
+    pend.erase(pend.begin());
+}
 
 const_iterator_list findNextPosition(std::list<PmergeMe>& pend, const int& jacobNumber, const size_t& pairValue)
 {
@@ -294,3 +302,4 @@ const_iterator_list findTargetPosition(std::list<PmergeMe>& main, const PmergeMe
     }
     return main.end();
 };
+
