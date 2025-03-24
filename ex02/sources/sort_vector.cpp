@@ -79,6 +79,7 @@ void insertion(std::vector<PmergeMe>& main, size_t& pairValue)
     {
         if (COMMENTS)
             std::cout << "------- PAIR VALUE = " << pairValue << " -------" << std::endl;
+        printComparisonAmount();
         size_t comparisonIndex = pairValue * 3 - 1;
         if (comparisonIndex > main.size())
             continue ;
@@ -95,7 +96,8 @@ void insertion(std::vector<PmergeMe>& main, size_t& pairValue)
             {
                 if (COMMENTS)
                     std::cout << "comparing " << main.at(comparisonIndex).getValue() << " with " << main.at(comparisonIndex + pairValue).getValue() << std::endl;
-                if (compare(main.at(comparisonIndex), main.at(comparisonIndex + pairValue)))
+                //if (compare(main.at(comparisonIndex), main.at(comparisonIndex + pairValue)))
+                if (main.at(comparisonIndex).getValue() > main.at(comparisonIndex + pairValue).getValue())
                     moveToPend(main, pend, pairValue, comparisonIndex + 1, pendIndex);
                 else
                     moveToPend(main, pend, pairValue, comparisonIndex - pairValue + 1, pendIndex);
@@ -223,24 +225,26 @@ const_iterator_vector findLastPosition(std::vector<PmergeMe>& pend, const int& j
 const_iterator_vector findTargetPosition(std::vector<PmergeMe>& main, const PmergeMe& element, const size_t& pairValue)
 {
     auto it = main.begin() + pairValue - 1;
-    for (; it < main.end(); it += pairValue)
+    while (it < main.end())
     {
-        if (it >= main.end())
-            break ;
+        //std::cout << "element index " << element.getLetter() << element.getIndex() << " compared to " << it->getLetter() << it->getIndex() << std::endl;
         if (COMMENTS)
             std::cout << "finding target... comparing " << element.getValue() << " with " << it->getValue() << std::endl;
+        if (it->getLetter() == 'A' && element.getIndex() == it->getIndex())
+        { 
+            if (COMMENTS)
+                std::cout << "limit found\n";
+            return it - (pairValue - 1);
+        }
         if (!compare(element, *it))
         {
             if (COMMENTS)
                 std::cout << "bigger value found\n";
             return it - (pairValue - 1);
         }
-        if (element.getIndex() == it->getIndex() - 1 && it->getLetter() == 'A')
-        { 
-            if (COMMENTS)
-                std::cout << "limit found\n";
-            return it - (pairValue - 1);
-        }
+        if (it + pairValue >= main.end())
+            break;
+        it += pairValue;
     }
     if (COMMENTS)
         std::cout << "end reached\n";

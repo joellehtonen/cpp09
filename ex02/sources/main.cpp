@@ -29,17 +29,19 @@ int main (int ac, char** av)
         }
         std::cout << "BEFORE: ";
         printContainerContents(vector);
-        //std::cout << "sorting vector...\n";
+        std::cout << "sorting vector...\n";
         auto startVector = std::chrono::steady_clock::now();
         sortVector(vector);
         auto stopVector = std::chrono::steady_clock::now();
-        //checkResultOrder(vctr);
+        checkResultOrder(vector);
+        std::cout << "\n\n\n";
 
-        //std::cout << "sorting list...\n";
+        std::cout << "sorting list...\n";
         auto startList = std::chrono::steady_clock::now();
+        resetComparisons();
         sortList(list);
         auto stopList = std::chrono::steady_clock::now();
-        //checkResultOrder(list);
+        checkResultOrder(list);
 
         std::cout << "AFTER: ";
         printContainerContents(vector);

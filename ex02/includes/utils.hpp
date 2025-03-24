@@ -5,7 +5,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <chrono>
-#define COMMENTS 0
+#define COMMENTS 1
 
 typedef std::vector<PmergeMe>::const_iterator const_iterator_vector;
 typedef std::list<PmergeMe>::const_iterator const_iterator_list;
@@ -63,6 +63,7 @@ bool checkResultOrder(const T& container);
 
 // COMPARE
 bool compare(const PmergeMe& ref1, const PmergeMe& ref2);
+void resetComparisons();
 void printComparisonAmount();
 
 #include "../sources/utils.tpp"

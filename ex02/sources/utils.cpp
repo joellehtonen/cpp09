@@ -38,6 +38,11 @@ bool checkOrder(int ac, char** av)
 	return false;
 }
 
+void resetComparisons()
+{
+	comparisons = 0;
+}
+
 bool compare(const PmergeMe& ref1, const PmergeMe& ref2)
 {
 	comparisons++;

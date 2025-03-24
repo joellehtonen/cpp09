@@ -90,6 +90,7 @@ void insertion(std::list<PmergeMe>& main, size_t& pairValue)
     {
         if (COMMENTS)
             std::cout << "------- PAIR VALUE = " << pairValue << " -------" << std::endl;
+        printComparisonAmount();
         size_t comparisonIndex = pairValue * 3 - 1;
         if (comparisonIndex > main.size())
             continue ;
@@ -110,7 +111,8 @@ void insertion(std::list<PmergeMe>& main, size_t& pairValue)
             {
                 if (COMMENTS)
                     std::cout << "comparing " << it->getValue() << " with " << it2->getValue() << std::endl;
-                if (compare(*it, *it2))
+                //if (compare(*it, *it2))
+                if (it->getValue() > it2->getValue())
                     moveToPend(main, pend, pairValue, comparisonIndex + 1, pendIndex);
                 else
                     moveToPend(main, pend, pairValue, comparisonIndex - pairValue + 1, pendIndex);
@@ -272,6 +274,13 @@ const_iterator_list findTargetPosition(std::list<PmergeMe>& main, const PmergeMe
             break ;
         if (COMMENTS)
             std::cout << "finding target... comparing " << element.getValue() << " with " << it->getValue() << std::endl;
+        if (it->getLetter() == 'A' && element.getIndex() == it->getIndex())
+        { 
+            if (COMMENTS)
+                std::cout << "limit found\n";
+            std::advance(it, -(pairValue - 1));
+            return it;
+        }
         if (!compare(element, *it))
         {
             if (COMMENTS)
@@ -279,15 +288,8 @@ const_iterator_list findTargetPosition(std::list<PmergeMe>& main, const PmergeMe
             std::advance(it, -(pairValue - 1));
             return it;
         }
-        if (element.getIndex() == it->getIndex() - 1 && it->getLetter() == 'A')
-        { 
-            if (COMMENTS)
-                std::cout << "limit found\n";
-            std::advance(it, -(pairValue - 1));
-            return it;
-        }
         auto checkpoint = it;
-        for (size_t i = 0; i < pairValue; i++)
+        for (size_t i = 0; i < pairValue; i++) 
         {
             std::advance(it, 1);
             if (it == main.end())
