@@ -17,13 +17,13 @@ bool checkDigits(int ac, char**av)
 
 bool checkDuplicates(int ac, char** av)
 {
-	std::vector<char*> checked;
-	checked.push_back(av[1]);
+	std::vector<int> checked;
+	checked.push_back(std::stoi(av[1]));
 	for (int i = 2; i < ac; i++)
 	{
-		if (std::find(checked.begin(), checked.end(), av[i]) != checked.end())
+		if (std::find(checked.begin(), checked.end(), std::stoi(av[1])) != checked.end())
 			return false;
-		checked.push_back(av[i]);
+		checked.push_back(std::stoi(av[1]));
 	}
 	return true;
 }

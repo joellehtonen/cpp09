@@ -33,8 +33,9 @@ int main (int ac, char** av)
         auto startVector = std::chrono::steady_clock::now();
         sortVector(vector);
         auto stopVector = std::chrono::steady_clock::now();
-        //checkResultOrder(vector);
-        std::cout << "\n\n\n";
+        checkResultOrder(vector);
+        printComparisonAmount();
+        //std::cout << "\n\n\n";
 
         std::cout << "sorting list...\n";
         auto startList = std::chrono::steady_clock::now();
@@ -42,6 +43,7 @@ int main (int ac, char** av)
         sortList(list);
         auto stopList = std::chrono::steady_clock::now();
         checkResultOrder(list);
+        printComparisonAmount();
 
         std::cout << "AFTER: ";
         printContainerContents(vector);

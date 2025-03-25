@@ -34,9 +34,10 @@ void    moveToPend(std::list<PmergeMe>& main, std::list<PmergeMe>& pend, const s
 void    giveIndexes(std::list<PmergeMe>& main, const size_t& pairValue);
 void    insertBackToMain(std::list<PmergeMe>& main, std::list<PmergeMe>& pend, const size_t& pairValue);
 void 	handleRemainingElement(std::list<PmergeMe>& main, std::list<PmergeMe>& pend, const_iterator_list insertThis);
-const_iterator_list   findNextPosition(std::list<PmergeMe>& pend, const int& jacobNumber, const size_t& pairValue);
-const_iterator_list   findLastPosition(std::list<PmergeMe>& pend, const int& jacobNumber);
-const_iterator_list   findTargetPosition(std::list<PmergeMe>& main, const PmergeMe& element, const size_t& pairValue);
+const_iterator_list	findNextPosition(std::list<PmergeMe>& pend, const int& jacobNumber, const size_t& pairValue);
+const_iterator_list findLastPosition(std::list<PmergeMe>& pend, const int& jacobNumber);
+const_iterator_list	findTargetPosition(std::list<PmergeMe>& main, const PmergeMe& element, const size_t& pairValue);
+const_iterator_list	findLimit(std::list<PmergeMe>& main, const PmergeMe& element, const size_t& pairValue);
 
 // CHECKERS
 bool checkDigits(int ac, char**av);
