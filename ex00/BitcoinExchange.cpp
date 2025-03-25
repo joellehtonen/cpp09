@@ -43,11 +43,9 @@ void BitcoinExchange::copyDatabase() {
 		float valueFloat = stof(valueString);
 		this->_data[keyInt] = valueFloat;
 	}
-	dataStream.close(); //will this leak in case error is thrown?
+	dataStream.close();
 };
 
-
-//TODO REFACTOR THIS
 void BitcoinExchange::readInput(const std::string& input)
 {
 	bool firstLine = false;
@@ -181,7 +179,6 @@ void BitcoinExchange::printEquation(const float& value, std::map<int,float>::con
 {
 	float result = value * dataIt->second;
 	std::cout << " => " << value << " = " << result << "\n";
-	//check width of the float, so all decimals get printed
 }
 
 void BitcoinExchange::printError(std::string errorMessage) {

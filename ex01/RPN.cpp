@@ -23,19 +23,19 @@ void RPN::calculate(std::string originalArgument)
     {
         if (part.find_first_of("0123456789") != std::string::npos)
         {
-            int number = stoi(part);
+            double number = stod(part);
             calculator.push(number);
         }
         else if (calculator.size() >= 2)
         {
-            int first = calculator.top();
+            double first = calculator.top();
             calculator.pop();
             //std::cout << "first: " << first << std::endl; 
-            int second = calculator.top();
+            double second = calculator.top();
             calculator.pop();
             //std::cout << "second: " << second << std::endl; 
             //std::cout << "operator: " << part << std::endl;
-            int result = arithmetic(second, first, part);
+            double result = arithmetic(second, first, part);
             //std::cout << "result: " << result << std::endl;
             calculator.push(result);
             operationDone = true;
@@ -45,20 +45,25 @@ void RPN::calculate(std::string originalArgument)
     }
     if (operationDone == true)
     {
-        int finalResult = calculator.top();
+        double finalResult = calculator.top();
         calculator.pop();
         if (calculator.empty() == false)
             throw std::runtime_error("Invalid input");
+        else if (finalResult > INT_MAX || finalResult < INT_MIN)
+            throw std::runtime_error("Result overflows");
         else
-            std::cout << finalResult << std::endl;
+        {
+            int intResult = static_cast<int>(finalResult);
+            std::cout << intResult << std::endl;
+        }
     }
     else
     {
         throw std::runtime_error("At least one mathematical operator is needed");
     }
-}
+};
 
-int RPN::arithmetic(int& first, int& second, std::string& part) {
+double RPN::arithmetic(double& first, double& second, std::string& part) {
     if (part == "+")
         return (first + second);
     if (part == "-")

@@ -4,11 +4,12 @@
 #include <iostream>
 #include <sstream>
 #include <exception>
+#include <climits>
 
 class RPN {
     private:
-        std::stack<int> calculator;
-        int arithmetic(int& first, int& second, std::string& operation);
+        std::stack<double> calculator;
+        double arithmetic(double& first, double& second, std::string& operation);
     public:
         RPN();
         ~RPN();
