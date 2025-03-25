@@ -29,12 +29,10 @@ int main (int ac, char** av)
         }
         std::cout << "BEFORE: ";
         printContainerContents(vector);
-        //std::cout << "sorting vector...\n";
         auto startVector = std::chrono::steady_clock::now();
         sortVector(vector);
         auto stopVector = std::chrono::steady_clock::now();
 
-        //std::cout << "sorting list...\n";
         auto startList = std::chrono::steady_clock::now();
         resetComparisons();
         sortList(list);
@@ -48,11 +46,11 @@ int main (int ac, char** av)
         std::cout << "Time to sort " << vector.size() << " elements with vector: " << durationVector.count() << " milliseconds" << std::endl;
         std::cout << "Time to sort " << list.size() << " elements with list: " << durationList.count() << " milliseconds" << std::endl;
 
-        std::cout << "checking vector... "; 
-        checkResultOrder(vector);
-        std::cout << "checking list.. "; 
-        checkResultOrder(list);
-        printComparisonAmount();
+        // std::cout << "checking vector... "; 
+        // checkResultOrder(vector);
+        // std::cout << "checking list.. "; 
+        // checkResultOrder(list);
+        // printComparisonAmount();
     }
     catch (std::exception& e) {
         std::cerr << "Error. " << e.what() << "\n";
