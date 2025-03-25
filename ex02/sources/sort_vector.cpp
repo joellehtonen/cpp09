@@ -164,7 +164,7 @@ void giveIndexes(std::vector<PmergeMe>& main, const size_t& pairValue)
 
 void insertBackToMain(std::vector<PmergeMe>& main, std::vector<PmergeMe>& pend, const size_t& pairValue)
 {
-    std::vector<int> jacobsthal = {1, 3, 5, 11, 21, 43, 85, 171, 341, 683, 1365, 2731, 5461};
+    std::vector<int> jacobsthal = {1, 3, 5, 11, 21, 43, 85, 171, 341, 683, 1365, 2731, 5461, 10923, 21845, 43691, 87381};
 
     for (size_t jacobIndex = 1; pend.empty() == false; jacobIndex++)
     {
