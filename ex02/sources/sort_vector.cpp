@@ -78,8 +78,10 @@ void insertion(std::vector<PmergeMe>& main, size_t& pairValue)
     for (; pairValue >= 1; pairValue /= 2)
     {
         if (COMMENTS)
+        {
             std::cout << "------- PAIR VALUE = " << pairValue << " -------" << std::endl;
-        printComparisonAmount();
+            printComparisonAmount();
+        }
         size_t comparisonIndex = pairValue * 3 - 1;
         if (comparisonIndex > main.size())
             continue ;
@@ -222,73 +224,53 @@ const_iterator_vector findLastPosition(std::vector<PmergeMe>& pend, const int& j
     return pend.begin();
 };
 
-// const_iterator_vector findTargetPosition(std::vector<PmergeMe>& main, const PmergeMe& element, const size_t& pairValue)
-// {
-//     auto it = main.begin() + pairValue - 1;
-//     while (it < main.end())
-//     {
-//         //std::cout << "element index " << element.getLetter() << element.getIndex() << " compared to " << it->getLetter() << it->getIndex() << std::endl;
-//         if (COMMENTS)
-//             std::cout << "finding target... comparing " << element.getValue() << " with " << it->getValue() << std::endl;
-//         if (it->getLetter() == 'A' && element.getIndex() == it->getIndex())
-//         { 
-//             if (COMMENTS)
-//                 std::cout << "limit found\n";
-//             return it - (pairValue - 1);
-//         }
-//         if (!compare(element, *it))
-//         {
-//             if (COMMENTS)
-//                 std::cout << "bigger value found\n";
-//             return it - (pairValue - 1);
-//         }
-//         if (it + pairValue >= main.end())
-//             break;
-//         it += pairValue;
-//     }
-//     if (COMMENTS)
-//         std::cout << "end reached\n";
-//     return it - (pairValue - 1);
-// };
-
 const_iterator_vector findTargetPosition(std::vector<PmergeMe>& main, const PmergeMe& element, const size_t& pairValue)
 {
-    const_iterator_vector limit = findLimit(main, element, pairValue);
-    const_iterator_vector it  = main.begin();
-    while (it < limit)
+    const_iterator_vector high = findLimit(main, element, pairValue);
+    const_iterator_vector low  = main.begin() + (pairValue - 1);
+    while (low < high)
     {
-        size_t step = std::distance(it, limit) / 2;
+        size_t step = std::distance(low, high) / 2;
         step = (step / pairValue) * pairValue;
-        const_iterator_vector middle = std::next(it, step);
-        std::cout << "finding target... comparing " << element.getValue() << " with " << middle->getValue() << std::endl;
+        const_iterator_vector middle = std::next(low, step);
+        if (COMMENTS)
+        {
+            std::cout << "low is " << low->getValue() << ", high is " << high->getValue() << std::endl;
+            std::cout << "finding target... comparing " << element.getValue() << " with " << middle->getValue() << std::endl;
+        }
         if (compare(element, *middle))
         {
-            if (middle + pairValue < limit)
-                it = middle + pairValue;
+            if (middle + pairValue < high)
+                low = middle + pairValue;
             else
-                it = limit;
+                low = high;
         }
         else
-            limit = middle;
+            high = middle;
     }
-    return it;
+    const_iterator_vector target = low - (pairValue - 1);
+    if (COMMENTS)
+        std::cout << "target position FOUND. before the value " << target->getValue() << ", index " << target->getLetter() << target->getIndex() << std::endl;
+    return target;
 };
 
 const_iterator_vector findLimit(std::vector<PmergeMe>& main, const PmergeMe& element, const size_t& pairValue)
 {
-    std::cout << "finding limit for " << element.getValue() << std::endl;
-    auto it = main.begin() + pairValue - 1;
+    auto it = main.begin() + (pairValue - 1);
     while (it < main.end())
     {
         if (it->getLetter() == 'A' && element.getIndex() == it->getIndex())
         { 
             if (COMMENTS)
-                std::cout << "limit found. it's value is " << it->getValue() << std::endl;
-            return it - (pairValue - 1);
+                std::cout << "limit found. its value is " << it->getValue() << std::endl;
+            return it;
         }
-        it += pairValue;
+        if (it + pairValue > main.end())
+            break ;
+        else
+            it += pairValue;
     }
     if (COMMENTS)
-        std::cout << "end reached\n";
-    return main.end();
+        std::cout << "end reached, limit value is " << it->getValue() << std::endl;
+    return it;
 };
