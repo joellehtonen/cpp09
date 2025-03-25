@@ -212,7 +212,7 @@ void insertBackToMain(std::list<PmergeMe>& main, std::list<PmergeMe>& pend, cons
             elementMovePos = pend.erase(elementMovePos, lastElem);
             if (pend.empty() == false)
             {
-                std::advance(elementMovePos, -1);
+                elementMovePos--;
                 elementCompPos = elementMovePos;
                 std::advance(elementMovePos, -(pairValue - 1));
             }
@@ -246,13 +246,12 @@ const_iterator_list findNextPosition(std::list<PmergeMe>& pend, const int& jacob
     {
         if (it->getIndex() == jacobNumber)
         {
-            int move = pairValue - 1;
-            std::advance(it, move);
+            std::advance(it, pairValue - 1);
             return it;
         }
     }
     auto end = pend.end();
-    std::advance(end, -1);
+    end--;
     return end;
 };
 
@@ -268,7 +267,9 @@ const_iterator_list findLastPosition(std::list<PmergeMe>& pend, const int& jacob
 
 const_iterator_list findTargetPosition(std::list<PmergeMe>& main, const PmergeMe& element, const size_t& pairValue)
 {
-    const_iterator_list high = findLimit(main, element, pairValue);
+    bool limit;
+    const_iterator_list high = findLimit(main, element, pairValue, limit);
+    const_iterator_list boundary = high;
     const_iterator_list low  = main.begin();
     std::advance(low, pairValue - 1);
     while (low != high)
@@ -286,7 +287,7 @@ const_iterator_list findTargetPosition(std::list<PmergeMe>& main, const PmergeMe
             auto middleLimitCheck = middle;
             for (size_t i = 0; i < pairValue; i++)
             {
-                std::advance(middleLimitCheck, 1);
+                middleLimitCheck++;
                 if (middleLimitCheck == high)
                 {
                     low = high;
@@ -304,12 +305,20 @@ const_iterator_list findTargetPosition(std::list<PmergeMe>& main, const PmergeMe
     }
     const_iterator_list target = low;
     std::advance(target, -(pairValue - 1));
+    if (limit == false && high == boundary)
+    {
+        target = boundary;
+        if (compare(element, *high))
+            target++;
+        else
+            std::advance(target, -(pairValue - 1));
+    }
     if (COMMENTS)
         std::cout << "target position FOUND. before the value " << target->getValue() << ", index " << target->getLetter() << target->getIndex() << std::endl;
     return target;
 };
 
-const_iterator_list findLimit(std::list<PmergeMe>& main, const PmergeMe& element, const size_t& pairValue)
+const_iterator_list findLimit(std::list<PmergeMe>& main, const PmergeMe& element, const size_t& pairValue, bool& limit)
 {
     auto it = main.begin();
     std::advance(it, pairValue - 1);
@@ -321,60 +330,21 @@ const_iterator_list findLimit(std::list<PmergeMe>& main, const PmergeMe& element
         { 
             if (COMMENTS)
                 std::cout << "limit found. its value is " << it->getValue() << std::endl;
+            limit = true;
             return it;
         }
         auto checkpoint = it;
         for (size_t i = 0; i < pairValue; i++)
         {
-            std::advance(it, 1);
+            it++;
             if (it == main.end())
             {
                 if (COMMENTS)
                     std::cout << "end reached, limit value is " << checkpoint->getValue() << std::endl;
+                limit = false;
                 return checkpoint;
             }
         }
     }
     return it;
 };
-
-
-// const_iterator_list findTargetPosition(std::list<PmergeMe>& main, const PmergeMe& element, const size_t& pairValue)
-// {
-//     auto it = main.begin();
-//     std::advance(it, (pairValue - 1));
-//     while (it != main.end())
-//     {
-//         if (std::distance(it, main.end()) <= 0)
-//             break ;
-//         if (COMMENTS)
-//             std::cout << "finding target... comparing " << element.getValue() << " with " << it->getValue() << std::endl;
-//         if (it->getLetter() == 'A' && element.getIndex() == it->getIndex())
-//         { 
-//             if (COMMENTS)
-//                 std::cout << "limit found\n";
-//             std::advance(it, -(pairValue - 1));
-//             return it;
-//         }
-//         if (!compare(element, *it))
-//         {
-//             if (COMMENTS)
-//                 std::cout << "bigger value found\n";
-//             std::advance(it, -(pairValue - 1));
-//             return it;
-//         }
-//         auto checkpoint = it;
-//         for (size_t i = 0; i < pairValue; i++) 
-//         {
-//             std::advance(it, 1);
-//             if (it == main.end())
-//             {
-//                 if (COMMENTS)
-//                     std::cout << "end reached\n";
-//                 std::advance(checkpoint, 1);
-//                 return checkpoint ;
-//             }
-//         }
-//     }
-//     return main.end();
-// };

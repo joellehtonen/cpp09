@@ -22,7 +22,7 @@ void    insertBackToMain(std::vector<PmergeMe>& main, std::vector<PmergeMe>& pen
 const_iterator_vector	findNextPosition(std::vector<PmergeMe>& pend, const int& jacobNumber, const size_t& pairValue);
 const_iterator_vector	findLastPosition(std::vector<PmergeMe>& pend, const int& jacobNumber);
 const_iterator_vector	findTargetPosition(std::vector<PmergeMe>& main, const PmergeMe& element, const size_t& pairValue);
-const_iterator_vector	findLimit(std::vector<PmergeMe>& main, const PmergeMe& element, const size_t& pairValue);
+const_iterator_vector 	findLimit(std::vector<PmergeMe>& main, const PmergeMe& element, const size_t& pairValue, bool& limit);
 
 // LIST FUNCTIONS
 void 	sortList(std::list<PmergeMe>& container);
@@ -37,7 +37,7 @@ void 	handleRemainingElement(std::list<PmergeMe>& main, std::list<PmergeMe>& pen
 const_iterator_list	findNextPosition(std::list<PmergeMe>& pend, const int& jacobNumber, const size_t& pairValue);
 const_iterator_list findLastPosition(std::list<PmergeMe>& pend, const int& jacobNumber);
 const_iterator_list	findTargetPosition(std::list<PmergeMe>& main, const PmergeMe& element, const size_t& pairValue);
-const_iterator_list	findLimit(std::list<PmergeMe>& main, const PmergeMe& element, const size_t& pairValue);
+const_iterator_list findLimit(std::list<PmergeMe>& main, const PmergeMe& element, const size_t& pairValue, bool& limit);
 
 // CHECKERS
 bool checkDigits(int ac, char**av);
