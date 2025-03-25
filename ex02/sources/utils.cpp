@@ -21,9 +21,9 @@ bool checkDuplicates(int ac, char** av)
 	checked.push_back(std::stoi(av[1]));
 	for (int i = 2; i < ac; i++)
 	{
-		if (std::find(checked.begin(), checked.end(), std::stoi(av[1])) != checked.end())
+		if (std::find(checked.begin(), checked.end(), std::stoi(av[i])) != checked.end())
 			return false;
-		checked.push_back(std::stoi(av[1]));
+		checked.push_back(std::stoi(av[i]));
 	}
 	return true;
 }
