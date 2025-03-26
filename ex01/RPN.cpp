@@ -70,7 +70,7 @@ double RPN::arithmetic(double& first, double& second, std::string& part) {
         return (first - second);
     if (part == "/")
     {
-        if (first == 0 || second == 0)
+        if (second == 0)
             throw std::runtime_error("Cannot divide by zero");
         return (first / second);
     }
