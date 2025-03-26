@@ -22,19 +22,23 @@ int main (int ac, char** av)
     std::list<PmergeMe>     list;
     try { 
         checkInput(ac, av); 
-        for (int i = 1; i < ac; i++)
-        {
-            vector.push_back(PmergeMe(av[i]));
-            list.push_back(PmergeMe(av[i]));
-        }
         std::cout << "BEFORE: ";
-        printContainerContents(vector);
+        for (int i = 1; i < ac; i++)
+            std::cout << av[i] << " ";
+        std::cout << std::endl;
+
+        //sorting vector
         auto startVector = std::chrono::steady_clock::now();
+        for (int i = 1; i < ac; i++)
+            vector.push_back(PmergeMe(av[i]));
         sortVector(vector);
         auto stopVector = std::chrono::steady_clock::now();
-
-        auto startList = std::chrono::steady_clock::now();
         resetComparisons();
+
+        //sorting list
+        auto startList = std::chrono::steady_clock::now();
+        for (int i = 1; i < ac; i++)
+            list.push_back(PmergeMe(av[i]));
         sortList(list);
         auto stopList = std::chrono::steady_clock::now();
 
@@ -46,11 +50,11 @@ int main (int ac, char** av)
         std::cout << "Time to sort " << vector.size() << " elements with vector: " << durationVector.count() << " milliseconds" << std::endl;
         std::cout << "Time to sort " << list.size() << " elements with list: " << durationList.count() << " milliseconds" << std::endl;
 
-        // std::cout << "checking vector... "; 
-        // checkResultOrder(vector);
-        // std::cout << "checking list.. "; 
-        // checkResultOrder(list);
-        // printComparisonAmount();
+        std::cout << "checking vector... "; 
+        checkResultOrder(vector);
+        std::cout << "checking list.. "; 
+        checkResultOrder(list);
+        printComparisonAmount();
     }
     catch (std::exception& e) {
         std::cerr << "Error. " << e.what() << "\n";
